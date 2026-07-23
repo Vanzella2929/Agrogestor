@@ -14,6 +14,6 @@ Muitos produtores realizam o controle dos custos manualmente, dificultando a an√
 ## Integrantes
 
 - Vitor Hugo Moreira Vanzella
-- Nome do Integrante 2
-- Nome do Integrante 3
-- Nome do Integrante 4
+- Vitor Eloidio
+- Felipe maia
+
