@@ -1,7 +1,7 @@
-# Projeto Software Agro Custo de Producao de Vaca Parida e Cria
+# Projeto Agrogestor
 Sistema para gerenciamento do custo de produção de vaca parida e cria no agronegócio.
 
-# Projeto Software Agro - Custo de Produção de Vaca Parida e Cria
+# Projeto Agrogestor
 
 ## Sobre o Projeto
 
