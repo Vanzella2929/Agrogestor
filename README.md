@@ -15,5 +15,5 @@ Muitos produtores realizam o controle dos custos manualmente, dificultando a an√
 
 - Vitor Hugo Moreira Vanzella
 - Vitor Eloidio
-- Felipe maia
+- Felipe Maia
 - Edvan Henrique
