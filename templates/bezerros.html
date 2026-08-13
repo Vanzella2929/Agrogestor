@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>👶 Bezerros e Crias</h2>
+    <a href="{{ url_for('cadastrar_bezerro') }}" class="btn btn-agro">+ Cadastrar Bezerro</a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Brinco Cria</th>
+                    <th>Mãe (Matriz)</th>
+                    <th>Sexo</th>
+                    <th>Data Nasc.</th>
+                    <th>Peso Nasc.</th>
+                    <th>Status</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bezerro in bezerros %}
+                <tr>
+                    <td class="fw-bold">{{ bezerro.brinco }}</td>
+                    <td>Brinco {{ bezerro.mae.brinco }} {{ '(' + bezerro.mae.nome + ')' if bezerro.mae.nome else '' }}</td>
+                    <td>{{ bezerro.sexo }}</td>
+                    <td>{{ bezerro.data_nascimento }}</td>
+                    <td>{{ bezerro.peso_nascimento or '-' }} kg</td>
+                    <td><span class="badge bg-success">{{ bezerro.situacao }}</span></td>
+                    <td class="text-end">
+                        <a href="{{ url_for('excluir_bezerro', id=bezerro.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Confirms a exclusão deste bezerro?')">Excluir</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center py-4 text-muted">Nenhum bezerro registrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
