@@ -1,0 +1,69 @@
+@startuml
+entity "ANIMAL" {
+        * id_animal : INT <<PK>>
+    
+    brinco : VARCHAR(50)
+    sexo : VARCHAR(20)
+    data_nascimento : DATE
+}
+entity "PESAGEM" {
+    * id_pesagem : INT <<PK>>
+    --
+    id_animal : INT <<FK>>
+    data_pesagem : DATE
+    peso : DECIMAL(10,2)
+}
+
+entity "INSUMO" {
+    * id_insumo : INT <<PK>>
+    --
+    nome : VARCHAR(100)
+    tipo : VARCHAR(50)
+    unidade : VARCHAR(20)
+    quantidade : DECIMAL(10,2)
+    valor_unitario : DECIMAL(10,2)
+}
+
+entity "DESPESA" {
+    * id_despesa : INT <<PK>>
+    --
+    id_insumo : INT <<FK>>
+    descricao : VARCHAR(150)
+    valor : DECIMAL(10,2)
+    data_despesa : DATE
+    categoria : VARCHAR(50)
+}
+
+entity "RECEITA" {
+    * id_receita : INT <<PK>>
+    --
+    descricao : VARCHAR(150)
+    valor : DECIMAL(10,2)
+    data_receita : DATE
+    categoria : VARCHAR(50)
+}
+
+entity "CRIA" {
+    * id_cria : INT <<PK>>
+    --
+    id_animal : INT <<FK>>
+    data_nascimento : DATE
+    sexo : VARCHAR(20)
+    peso_nascimento : DECIMAL(10,2)
+}
+
+ANIMAL ||--o{ PESAGEM : possui
+ANIMAL ||--o{ CRIA : gera
+INSUMO ||--o{ DESPESA : gera
+
+@enduml
+
+
+
+
+
+
+
+
+
+
