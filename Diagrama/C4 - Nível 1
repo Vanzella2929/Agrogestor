@@ -1,0 +1,10 @@
+graph TD
+A[Produtor]-->B[Agrogestor]
+B-->C[Animais]
+B-->D[Finanças]
+B-->E[Relatórios]
+C-->F[(Banco)]
+D-->F
+F-->E
+E-->G[Decisões]
+G-->A
