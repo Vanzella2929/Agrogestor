@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Agrogestor - Financeiro</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Agrogestor</h1>
+    <nav>
+      <a href="{{ url_for('index') }}">Painel</a>
+      <a href="{{ url_for('animais') }}">Animais</a>
+      <a href="{{ url_for('custos') }}" class="active">Custos e Receitas</a>
+      <a href="{{ url_for('relatorios') }}">Relatórios</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Lançamento Financeiro</h2>
+      <form action="/custos" method="POST">
+        <select name="type" required>
+          <option value="Despesa">Despesa (Custo)</option>
+          <option value="Receita">Receita (Venda/Leite)</option>
+        </select>
+        <input type="text" name="target" placeholder="Brinco ou Lote" required>
+        <input type="text" name="description" placeholder="Descrição (ex: Ração, Vacina, Venda)" required>
+        <input type="number" name="amount" placeholder="Valor (R$)" step="0.01" required>
+        <button type="submit">Registrar Lançamento</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Histórico de Movimentações</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Alvo</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,52 @@
+@startuml
+
+title Fluxograma de Processo do Agrogestor
+
+start
+
+:Acessar o sistema Agrogestor;
+
+:Escolher funcionalidade;
+
+if (Qual funcionalidade?) then (Animais)
+
+    :Cadastrar animal;
+
+    :Registrar informações
+    do animal;
+
+    :Registrar pesagem;
+
+elseif (Insumos) then
+
+    :Cadastrar insumo;
+
+    :Registrar utilização
+    dos insumos;
+
+elseif (Financeiro) then
+
+    :Registrar despesas;
+
+    :Registrar receitas
+    e vendas;
+
+endif
+
+:Salvar informações
+no banco de dados;
+
+:Calcular custos
+de produção;
+
+:Gerar relatórios;
+
+:Analisar gastos,
+receitas e resultados;
+
+:Auxiliar na tomada
+de decisão do produtor;
+
+stop
+
+@enduml

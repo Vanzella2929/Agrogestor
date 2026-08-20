@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Agrogestor - Relatórios</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Agrogestor</h1>
+    <nav>
+      <a href="{{ url_for('index') }}">Painel</a>
+      <a href="{{ url_for('animais') }}">Animais</a>
+      <a href="{{ url_for('custos') }}">Custos e Receitas</a>
+      <a href="{{ url_for('relatorios') }}" class="active">Relatórios</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Resumo de Custos por Categoria</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Categoria</th>
+            <th>Custo Total</th>
+            <th>Média por Animal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Vacas Paridas</td>
+            <td>R$ 0,00</td>
+            <td>R$ 0,00</td>
+          </tr>
+          <tr>
+            <td>Bezerros(as)</td>
+            <td>R$ 0,00</td>
+            <td>R$ 0,00</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
