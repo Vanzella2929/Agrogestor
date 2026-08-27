@@ -1,46 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Agrogestor - Reports</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-  <header>
-    <h1>Agrogestor</h1>
-    <nav>
-      <a href="{{ url_for('index') }}">Dashboard</a>
-      <a href="{{ url_for('animais') }}">Animals</a>
-      <a href="{{ url_for('custos') }}">Costs & Revenue</a>
-      <a href="{{ url_for('relatorios') }}" class="active">Reports</a>
-    </nav>
-  </header>
+{% extends 'base.html' %}
 
-  <main class="container">
-    <section class="card">
-      <h2>Cost Summary by Category</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>Total Cost</th>
-            <th>Average per Animal</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Calved Cows</td>
-            <td>$ 0.00</td>
-            <td>$ 0.00</td>
-          </tr>
-          <tr>
-            <td>Calves</td>
-            <td>$ 0.00</td>
-            <td>$ 0.00</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-  </main>
-</body>
-</html>
+{% block conteudo %}
+<section class="card">
+  <h2>Resumo de Custos por Categoria</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Categoria</th>
+        <th>Custo Total</th>
+        <th>Média por Animal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Vacas Paridas</td>
+        <td>R$ 0,00</td>
+        <td>R$ 0,00</td>
+      </tr>
+      <tr>
+        <td>Bezerros(as)</td>
+        <td>R$ 0,00</td>
+        <td>R$ 0,00</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+{% endblock %}
