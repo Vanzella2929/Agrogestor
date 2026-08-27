@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<section class="card">
+  <h2>Lançamento Financeiro</h2>
+  <form action="{{ url_for('custos') }}" method="POST">
+    <select name="tipo" required>
+      <option value="" disabled selected>Selecione o Tipo</option>
+      <option value="Despesa">Despesa (Custo)</option>
+      <option value="Receita">Receita (Venda/Leite)</option>
+    </select>
+    <input type="text" name="alvo" placeholder="Brinco ou Lote" required>
+    <input type="text" name="descricao" placeholder="Descrição (ex: Ração, Vacina, Venda)" required>
+    <input type="number" name="valor" placeholder="Valor (R$)" step="0.01" required>
+    <button type="submit">Registrar Lançamento</button>
+  </form>
+</section>
+
+<section class="card">
+  <h2>Histórico de Movimentações</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Alvo</th>
+        <th>Descrição</th>
+        <th>Valor</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for custo in custos %}
+      <tr>
+        <td>{{ custo.tipo }}</td>
+        <td>{{ custo.alvo }}</td>
+        <td>{{ custo.descricao }}</td>
+        <td>R$ {{ "%.2f"|format(custo.valor) }}</td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="4">Nenhuma movimentação registrada.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
