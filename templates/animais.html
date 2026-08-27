@@ -2,8 +2,8 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Rebanho de Matrizes</h2>
-    <a href="{{ url_for('cadastrar_animal') }}" class="btn btn-agro">+ Cadastrar Nova Vaca</a>
+    <h2>Breeding Herd</h2>
+    <a href="{{ url_for('cadastrar_animal') }}" class="btn btn-agro">+ Register New Cow</a>
 </div>
 
 <div class="card shadow-sm border-0">
@@ -11,12 +11,12 @@
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
                 <tr>
-                    <th>Brinco</th>
-                    <th>Nome</th>
-                    <th>Raça</th>
-                    <th>Lote</th>
-                    <th>Situação</th>
-                    <th class="text-end">Ações</th>
+                    <th>Ear Tag</th>
+                    <th>Name</th>
+                    <th>Breed</th>
+                    <th>Batch</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,23 +25,23 @@
                     <td class="fw-bold">{{ animal.brinco }}</td>
                     <td>{{ animal.nome or '-' }}</td>
                     <td>{{ animal.raca }}</td>
-                    <td><span class="badge bg-secondary">{{ animal.lote.nome if animal.lote else 'Sem Lote' }}</span></td>
+                    <td><span class="badge bg-secondary">{{ animal.lote.nome if animal.lote else 'No Batch' }}</span></td>
                     <td>
                         {% if animal.situacao == 'Parida' %}
-                            <span class="badge bg-success">Parida</span>
+                            <span class="badge bg-success">Calved</span>
                         {% elif animal.situacao == 'Gestante' %}
-                            <span class="badge bg-warning text-dark">Gestante</span>
+                            <span class="badge bg-warning text-dark">Pregnant</span>
                         {% else %}
-                            <span class="badge bg-info text-dark">Vazia</span>
+                            <span class="badge bg-info text-dark">Open</span>
                         {% endif %}
                     </td>
                     <td class="text-end">
-                        <a href="{{ url_for('excluir_animal', id=animal.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Confirma a exclusão deste animal?')">Excluir</a>
+                        <a href="{{ url_for('excluir_animal', id=animal.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this animal?')">Delete</a>
                     </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="6" class="text-center py-4 text-muted">Nenhum animal cadastrado até o momento.</td>
+                    <td colspan="6" class="text-center py-4 text-muted">No animals registered yet.</td>
                 </tr>
                 {% endfor %}
             </tbody>
