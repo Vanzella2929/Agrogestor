@@ -2,58 +2,37 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
+
 <h2>Visão Geral da Propriedade</h2>
 
 <div class="grid-cards">
-  <div class="card">
-    <h3>Total de Animais</h3>
-    <p id="total-animais">0</p>
-  </div>
-  <div class="card">
-    <h3>Custos Acumulados</h3>
-    <p id="total-custos">R$ 0,00</p>
-  </div>
-  <div class="card">
-    <h3>Receitas Totais</h3>
-    <p id="total-receitas">R$ 0,00</p>
-  </div>
-</div>
-{% endblock %}
-=======
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Agrogestor - Dashboard</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <header>
-    <h1>Agrogestor</h1>
-    <nav>
-      <a href="index.html" class="active">Dashboard</a>
-      <a href="animais.html">Animals</a>
-      <a href="custos.html">Costs & Revenue</a>
-      <a href="relatorios.html">Reports</a>
-    </nav>
-  </header>
 
-  <main class="container">
-    <h2>Property Overview</h2>
-    <div class="grid-cards">
-      <div class="card">
-        <h3>Total Animals</h3>
-        <p id="total-animais">0</p>
-      </div>
-      <div class="card">
-        <h3>Accumulated Costs</h3>
-        <p id="total-custos">$ 0.00</p>
-      </div>
-      <div class="card">
-        <h3>Total Revenue</h3>
-        <p id="total-receitas">$ 0.00</p>
-      </div>
+    <div class="card">
+        <h3>Total de Animais</h3>
+
+        <p id="total-animais">
+            {{ total_animais }}
+        </p>
     </div>
-  </main>
-</body>
-</html>
+
+
+    <div class="card">
+        <h3>Custos Acumulados</h3>
+
+        <p id="total-custos">
+            R$ {{ "%.2f"|format(total_custos)|replace(".", ",") }}
+        </p>
+    </div>
+
+
+    <div class="card">
+        <h3>Receitas Totais</h3>
+
+        <p id="total-receitas">
+            R$ {{ "%.2f"|format(total_receitas)|replace(".", ",") }}
+        </p>
+    </div>
+
+</div>
+
+{% endblock %}
