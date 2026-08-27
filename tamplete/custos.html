@@ -1,45 +1,45 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Agrogestor - Financeiro</title>
+  <title>Agrogestor - Financial</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
   <header>
     <h1>Agrogestor</h1>
     <nav>
-      <a href="{{ url_for('index') }}">Painel</a>
-      <a href="{{ url_for('animais') }}">Animais</a>
-      <a href="{{ url_for('custos') }}" class="active">Custos e Receitas</a>
-      <a href="{{ url_for('relatorios') }}">Relatórios</a>
+      <a href="{{ url_for('index') }}">Dashboard</a>
+      <a href="{{ url_for('animais') }}">Animals</a>
+      <a href="{{ url_for('custos') }}" class="active">Costs and Revenue</a>
+      <a href="{{ url_for('relatorios') }}">Reports</a>
     </nav>
   </header>
 
   <main class="container">
     <section class="card">
-      <h2>Lançamento Financeiro</h2>
+      <h2>Financial Entry</h2>
       <form action="/custos" method="POST">
         <select name="type" required>
-          <option value="Despesa">Despesa (Custo)</option>
-          <option value="Receita">Receita (Venda/Leite)</option>
+          <option value="Despesa">Expense (Cost)</option>
+          <option value="Receita">Revenue (Sale/Milk)</option>
         </select>
-        <input type="text" name="target" placeholder="Brinco ou Lote" required>
-        <input type="text" name="description" placeholder="Descrição (ex: Ração, Vacina, Venda)" required>
-        <input type="number" name="amount" placeholder="Valor (R$)" step="0.01" required>
-        <button type="submit">Registrar Lançamento</button>
+        <input type="text" name="target" placeholder="Ear Tag or Batch" required>
+        <input type="text" name="description" placeholder="Description (e.g., Feed, Vaccine, Sale)" required>
+        <input type="number" name="amount" placeholder="Amount ($)" step="0.01" required>
+        <button type="submit">Register Entry</button>
       </form>
     </section>
 
     <section class="card">
-      <h2>Histórico de Movimentações</h2>
+      <h2>Transaction History</h2>
       <table>
         <thead>
           <tr>
-            <th>Tipo</th>
-            <th>Alvo</th>
-            <th>Descrição</th>
-            <th>Valor</th>
+            <th>Type</th>
+            <th>Target</th>
+            <th>Description</th>
+            <th>Amount</th>
           </tr>
         </thead>
         <tbody></tbody>
