@@ -1,28 +1,95 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
+
 <section class="card">
-  <h2>Resumo de Custos por Categoria</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Categoria</th>
-        <th>Custo Total</th>
-        <th>Média por Animal</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Vacas Paridas</td>
-        <td>R$ 0,00</td>
-        <td>R$ 0,00</td>
-      </tr>
-      <tr>
-        <td>Bezerros(as)</td>
-        <td>R$ 0,00</td>
-        <td>R$ 0,00</td>
-      </tr>
-    </tbody>
-  </table>
+
+    <h2>Resumo Financeiro</h2>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Categoria</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>Total de Despesas</td>
+
+                <td>
+                    R$ {{ "%.2f"|format(total_despesas)|replace(".", ",") }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>Total de Receitas</td>
+
+                <td>
+                    R$ {{ "%.2f"|format(total_receitas)|replace(".", ",") }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>Total de Animais</td>
+
+                <td>
+                    {{ total_animais }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>Média de Custo por Animal</td>
+
+                <td>
+                    R$ {{ "%.2f"|format(media_por_animal)|replace(".", ",") }}
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
 </section>
+
+
+<section class="card">
+
+    <h2>Situação do Rebanho</h2>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Situação</th>
+                <th>Quantidade</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>Vacas Paridas</td>
+                <td>{{ vacas_paridas }}</td>
+            </tr>
+
+            <tr>
+                <td>Vacas Gestantes</td>
+                <td>{{ vacas_gestantes }}</td>
+            </tr>
+
+            <tr>
+                <td>Vacas Vazias</td>
+                <td>{{ vacas_vazias }}</td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</section>
+
 {% endblock %}
