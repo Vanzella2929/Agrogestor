@@ -1,0 +1,94 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #f2f5f3;
+  color: #333;
+}
+
+header {
+  background-color: #1b4332;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav a {
+  color: #d8f3dc;
+  text-decoration: none;
+  margin-left: 15px;
+  font-weight: bold;
+}
+
+nav a:hover, nav a.active {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+form input, form select, form button {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form button {
+  grid-column: span 2;
+  background-color: #2d6a4f;
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #1b4332;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background-color: #e9f5ed;
+  color: #1b4332;
+}
