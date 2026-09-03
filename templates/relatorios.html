@@ -6,6 +6,41 @@ Relatórios | Agrogestor
 
 {% block conteudo %}
 
+{# ==========================================================
+   PROTEÇÃO CONTRA VARIÁVEIS NÃO DEFINIDAS
+   ========================================================== #}
+
+{% set saldo_valor = saldo|default(0, true) %}
+{% set receitas_valor = total_receitas|default(0, true) %}
+{% set despesas_valor = total_despesas|default(0, true) %}
+{% set animais_total = total_animais|default(0, true) %}
+{% set custo_medio = media_por_animal|default(0, true) %}
+
+{% set paridas = vacas_paridas|default(0, true) %}
+{% set gestantes = vacas_gestantes|default(0, true) %}
+{% set vazias = vacas_vazias|default(0, true) %}
+
+{# Percentuais calculados com segurança #}
+
+{% if animais_total > 0 %}
+
+    {% set percentual_paridas = (paridas * 100 / animais_total)|round(0) %}
+    {% set percentual_gestantes = (gestantes * 100 / animais_total)|round(0) %}
+    {% set percentual_vazias = (vazias * 100 / animais_total)|round(0) %}
+
+{% else %}
+
+    {% set percentual_paridas = 0 %}
+    {% set percentual_gestantes = 0 %}
+    {% set percentual_vazias = 0 %}
+
+{% endif %}
+
+
+<!-- ==========================================================
+     CABEÇALHO
+     ========================================================== -->
+
 <div class="boas-vindas">
 
     <span class="pequeno-titulo">
@@ -23,44 +58,56 @@ Relatórios | Agrogestor
 </div>
 
 
-<!-- RESULTADO -->
+<!-- ==========================================================
+     RESULTADO DA PROPRIEDADE
+     ========================================================== -->
 
 <section class="relatorio-destaque">
 
-    <span class="pequeno-titulo">
-        RESULTADO DA PROPRIEDADE
-    </span>
+    <div>
 
-    <h2>
-        R$ {{ "%.2f"|format(saldo)|replace(".", ",") }}
-    </h2>
+        <span class="pequeno-titulo">
+            RESULTADO DA PROPRIEDADE
+        </span>
 
-    {% if saldo > 0 %}
+        <h2>
+            R$ {{ "%.2f"|format(saldo_valor)|replace(".", ",") }}
+        </h2>
 
-        <p>
-            ✅ Resultado positivo: as receitas são maiores que as despesas.
-        </p>
 
-    {% elif saldo < 0 %}
+        {% if saldo_valor > 0 %}
 
-        <p>
-            ⚠️ Atenção: as despesas são maiores que as receitas.
-        </p>
+            <p>
+                ✅ Resultado positivo: as receitas são maiores que as despesas.
+            </p>
 
-    {% else %}
+        {% elif saldo_valor < 0 %}
 
-        <p>
-            ℹ️ As receitas e despesas estão equilibradas.
-        </p>
+            <p>
+                ⚠️ Atenção: as despesas são maiores que as receitas.
+            </p>
 
-    {% endif %}
+        {% else %}
+
+            <p>
+                ℹ️ As receitas e despesas estão equilibradas.
+            </p>
+
+        {% endif %}
+
+    </div>
 
 </section>
 
 
-<!-- RESUMO FINANCEIRO -->
+<!-- ==========================================================
+     RESUMO FINANCEIRO
+     ========================================================== -->
 
 <div class="relatorio-grid">
+
+
+    <!-- RECEITAS -->
 
     <div class="relatorio-card">
 
@@ -75,7 +122,7 @@ Relatórios | Agrogestor
             </span>
 
             <strong>
-                R$ {{ "%.2f"|format(total_receitas)|replace(".", ",") }}
+                R$ {{ "%.2f"|format(receitas_valor)|replace(".", ",") }}
             </strong>
 
             <small>
@@ -86,6 +133,8 @@ Relatórios | Agrogestor
 
     </div>
 
+
+    <!-- DESPESAS -->
 
     <div class="relatorio-card">
 
@@ -100,7 +149,7 @@ Relatórios | Agrogestor
             </span>
 
             <strong>
-                R$ {{ "%.2f"|format(total_despesas)|replace(".", ",") }}
+                R$ {{ "%.2f"|format(despesas_valor)|replace(".", ",") }}
             </strong>
 
             <small>
@@ -111,6 +160,8 @@ Relatórios | Agrogestor
 
     </div>
 
+
+    <!-- REBANHO -->
 
     <div class="relatorio-card">
 
@@ -125,7 +176,7 @@ Relatórios | Agrogestor
             </span>
 
             <strong>
-                {{ total_animais }}
+                {{ animais_total }}
             </strong>
 
             <small>
@@ -136,6 +187,8 @@ Relatórios | Agrogestor
 
     </div>
 
+
+    <!-- CUSTO MÉDIO -->
 
     <div class="relatorio-card">
 
@@ -150,7 +203,7 @@ Relatórios | Agrogestor
             </span>
 
             <strong>
-                R$ {{ "%.2f"|format(media_por_animal)|replace(".", ",") }}
+                R$ {{ "%.2f"|format(custo_medio)|replace(".", ",") }}
             </strong>
 
             <small>
@@ -161,10 +214,13 @@ Relatórios | Agrogestor
 
     </div>
 
+
 </div>
 
 
-<!-- SITUAÇÃO DO REBANHO -->
+<!-- ==========================================================
+     SITUAÇÃO DO REBANHO
+     ========================================================== -->
 
 <section class="card">
 
@@ -181,7 +237,7 @@ Relatórios | Agrogestor
     </p>
 
 
-    <!-- PARIDAS -->
+    <!-- VACAS PARIDAS -->
 
     <div class="barra-item">
 
@@ -192,7 +248,7 @@ Relatórios | Agrogestor
             </span>
 
             <strong>
-                {{ vacas_paridas }}
+                {{ paridas }}
             </strong>
 
         </div>
@@ -209,7 +265,7 @@ Relatórios | Agrogestor
     </div>
 
 
-    <!-- GESTANTES -->
+    <!-- VACAS GESTANTES -->
 
     <div class="barra-item">
 
@@ -220,7 +276,7 @@ Relatórios | Agrogestor
             </span>
 
             <strong>
-                {{ vacas_gestantes }}
+                {{ gestantes }}
             </strong>
 
         </div>
@@ -237,7 +293,7 @@ Relatórios | Agrogestor
     </div>
 
 
-    <!-- VAZIAS -->
+    <!-- VACAS VAZIAS -->
 
     <div class="barra-item">
 
@@ -248,7 +304,7 @@ Relatórios | Agrogestor
             </span>
 
             <strong>
-                {{ vacas_vazias }}
+                {{ vazias }}
             </strong>
 
         </div>
@@ -267,7 +323,9 @@ Relatórios | Agrogestor
 </section>
 
 
-<!-- MOVIMENTAÇÕES -->
+<!-- ==========================================================
+     MOVIMENTAÇÕES
+     ========================================================== -->
 
 <section class="card tabela-card">
 
@@ -284,7 +342,7 @@ Relatórios | Agrogestor
     </p>
 
 
-    {% if movimentacoes %}
+    {% if movimentacoes|default([], true) %}
 
     <div class="tabela-responsiva">
 
@@ -420,7 +478,9 @@ Relatórios | Agrogestor
 </section>
 
 
-<!-- RESUMO FINAL -->
+<!-- ==========================================================
+     RESUMO FINAL
+     ========================================================== -->
 
 <section class="card">
 
@@ -436,6 +496,8 @@ Relatórios | Agrogestor
     <div class="resumo-informacoes">
 
 
+        <!-- ENTRADAS -->
+
         <div>
 
             <span>
@@ -443,11 +505,13 @@ Relatórios | Agrogestor
             </span>
 
             <strong>
-                R$ {{ "%.2f"|format(total_receitas)|replace(".", ",") }}
+                R$ {{ "%.2f"|format(receitas_valor)|replace(".", ",") }}
             </strong>
 
         </div>
 
+
+        <!-- SAÍDAS -->
 
         <div>
 
@@ -456,11 +520,13 @@ Relatórios | Agrogestor
             </span>
 
             <strong>
-                R$ {{ "%.2f"|format(total_despesas)|replace(".", ",") }}
+                R$ {{ "%.2f"|format(despesas_valor)|replace(".", ",") }}
             </strong>
 
         </div>
 
+
+        <!-- RESULTADO -->
 
         <div>
 
@@ -469,11 +535,13 @@ Relatórios | Agrogestor
             </span>
 
             <strong>
-                R$ {{ "%.2f"|format(saldo)|replace(".", ",") }}
+                R$ {{ "%.2f"|format(saldo_valor)|replace(".", ",") }}
             </strong>
 
         </div>
 
+
+        <!-- ANIMAIS -->
 
         <div>
 
@@ -482,7 +550,7 @@ Relatórios | Agrogestor
             </span>
 
             <strong>
-                {{ total_animais }}
+                {{ animais_total }}
             </strong>
 
         </div>
