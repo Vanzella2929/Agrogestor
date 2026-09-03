@@ -2,11 +2,12 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-app = Flask(__name__)
 
-# ==================================================
-# CONFIGURAÇÃO
-# ==================================================
+# ============================================================
+# CONFIGURAÇÃO DO FLASK
+# ============================================================
+
+app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///agrogestor.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -14,9 +15,9 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
-# ==================================================
+# ============================================================
 # TABELA DE LOTES
-# ==================================================
+# ============================================================
 
 class Lote(db.Model):
 
@@ -37,9 +38,9 @@ class Lote(db.Model):
     )
 
 
-# ==================================================
+# ============================================================
 # TABELA DE ANIMAIS
-# ==================================================
+# ============================================================
 
 class Animal(db.Model):
 
@@ -80,9 +81,9 @@ class Animal(db.Model):
     )
 
 
-# ==================================================
+# ============================================================
 # TABELA DE CUSTOS E RECEITAS
-# ==================================================
+# ============================================================
 
 class Custo(db.Model):
 
@@ -117,60 +118,49 @@ class Custo(db.Model):
     )
 
 
-# ==================================================
+# ============================================================
 # CRIAR BANCO DE DADOS
-# ==================================================
+# ============================================================
 
 with app.app_context():
     db.create_all()
 
 
-# ==================================================
+# ============================================================
 # PAINEL PRINCIPAL
-# ==================================================
+# ============================================================
 
 @app.route("/")
 def index():
 
-    # Total de animais
     total_animais = Animal.query.count()
 
-    # Total de despesas
-    total_despesas = db.session.query(
+    total_custos = db.session.query(
         db.func.sum(Custo.valor)
     ).filter(
         Custo.tipo == "Despesa"
     ).scalar() or 0
 
-    # Total de receitas
     total_receitas = db.session.query(
         db.func.sum(Custo.valor)
     ).filter(
         Custo.tipo == "Receita"
     ).scalar() or 0
 
-    # Saldo
-    saldo = total_receitas - total_despesas
+    saldo = total_receitas - total_custos
 
     return render_template(
         "index.html",
-
         total_animais=total_animais,
-
-        total_despesas=total_despesas,
-
-        # Mantém compatibilidade com seu HTML antigo
-        total_custos=total_despesas,
-
+        total_custos=total_custos,
         total_receitas=total_receitas,
-
         saldo=saldo
     )
 
 
-# ==================================================
-# ANIMAIS
-# ==================================================
+# ============================================================
+# LISTA DE ANIMAIS
+# ============================================================
 
 @app.route("/animais")
 def animais():
@@ -185,9 +175,9 @@ def animais():
     )
 
 
-# ==================================================
+# ============================================================
 # CADASTRAR ANIMAL
-# ==================================================
+# ============================================================
 
 @app.route(
     "/animais/cadastrar",
@@ -221,38 +211,34 @@ def cadastrar_animal():
             "lote_id"
         )
 
-        # Verificação dos campos obrigatórios
         if not brinco or not raca:
 
-            return (
-                "Erro: brinco e raça são obrigatórios."
-            )
+            return "Erro: brinco e raça são obrigatórios."
 
-        # Verificar se o brinco já existe
+
         animal_existente = Animal.query.filter_by(
             brinco=brinco
         ).first()
 
         if animal_existente:
 
-            return (
-                "Erro: já existe um animal "
-                "com esse brinco."
-            )
+            return "Erro: já existe um animal com esse brinco."
 
-        # Converter lote
+
         if lote_id:
 
             try:
                 lote_id = int(lote_id)
 
             except ValueError:
-                lote_id = None
+
+                return "Erro: lote inválido."
 
         else:
+
             lote_id = None
 
-        # Criar animal
+
         novo_animal = Animal(
             brinco=brinco,
             nome=nome,
@@ -268,7 +254,7 @@ def cadastrar_animal():
             url_for("animais")
         )
 
-    # Buscar lotes
+
     lotes = Lote.query.order_by(
         Lote.nome.asc()
     ).all()
@@ -279,13 +265,11 @@ def cadastrar_animal():
     )
 
 
-# ==================================================
+# ============================================================
 # EXCLUIR ANIMAL
-# ==================================================
+# ============================================================
 
-@app.route(
-    "/animais/excluir/<int:id>"
-)
+@app.route("/animais/excluir/<int:id>")
 def excluir_animal(id):
 
     animal = db.session.get(
@@ -297,6 +281,7 @@ def excluir_animal(id):
 
         return "Animal não encontrado."
 
+
     db.session.delete(animal)
     db.session.commit()
 
@@ -305,9 +290,9 @@ def excluir_animal(id):
     )
 
 
-# ==================================================
+# ============================================================
 # CUSTOS E RECEITAS
-# ==================================================
+# ============================================================
 
 @app.route(
     "/custos",
@@ -315,15 +300,9 @@ def excluir_animal(id):
 )
 def custos():
 
-    # ==================================================
-    # CADASTRAR MOVIMENTAÇÃO
-    # ==================================================
-
     if request.method == "POST":
 
-        tipo = request.form.get(
-            "tipo"
-        )
+        tipo = request.form.get("tipo")
 
         alvo = request.form.get(
             "alvo",
@@ -340,48 +319,53 @@ def custos():
             ""
         ).strip()
 
-        # Verificar tipo
+
         if tipo not in [
             "Despesa",
             "Receita"
         ]:
 
-            return "Erro: tipo inválido."
+            return "Erro: tipo de movimentação inválido."
 
-        # Verificar campos
+
         if not alvo or not descricao or not valor:
 
-            return (
-                "Erro: preencha todos os campos."
-            )
+            return "Erro: preencha todos os campos."
 
-        # Converter valor
+
         try:
 
-            valor = float(
-                valor.replace(",", ".")
+            valor = valor.replace(
+                ".",
+                ""
+            ).replace(
+                ",",
+                "."
             )
+
+            valor = float(valor)
 
         except ValueError:
 
             return "Erro: valor inválido."
 
-        # Não permitir valor zero ou negativo
+
         if valor <= 0:
 
-            return (
-                "Erro: o valor deve ser maior que zero."
-            )
+            return "Erro: o valor deve ser maior que zero."
 
-        # Criar lançamento
-        novo_custo = Custo(
+
+        nova_movimentacao = Custo(
             tipo=tipo,
             alvo=alvo,
             descricao=descricao,
             valor=valor
         )
 
-        db.session.add(novo_custo)
+        db.session.add(
+            nova_movimentacao
+        )
+
         db.session.commit()
 
         return redirect(
@@ -389,71 +373,26 @@ def custos():
         )
 
 
-    # ==================================================
-    # BUSCAR MOVIMENTAÇÕES
-    # ==================================================
-
     lista_custos = Custo.query.order_by(
         Custo.data.desc()
     ).all()
 
-
-    # ==================================================
-    # CALCULAR DESPESAS
-    # ==================================================
-
-    total_despesas = db.session.query(
-        db.func.sum(Custo.valor)
-    ).filter(
-        Custo.tipo == "Despesa"
-    ).scalar() or 0
-
-
-    # ==================================================
-    # CALCULAR RECEITAS
-    # ==================================================
-
-    total_receitas = db.session.query(
-        db.func.sum(Custo.valor)
-    ).filter(
-        Custo.tipo == "Receita"
-    ).scalar() or 0
-
-
-    # ==================================================
-    # CALCULAR SALDO
-    # ==================================================
-
-    saldo = total_receitas - total_despesas
-
-
-    # ==================================================
-    # ENVIAR DADOS PARA custos.html
-    # ==================================================
-
     return render_template(
         "custos.html",
-
-        custos=lista_custos,
-
-        total_despesas=total_despesas,
-
-        total_receitas=total_receitas,
-
-        saldo=saldo
+        custos=lista_custos
     )
 
 
-# ==================================================
+# ============================================================
 # RELATÓRIOS
-# ==================================================
+# ============================================================
 
 @app.route("/relatorios")
 def relatorios():
 
-    # ==================================================
-    # TOTAL DE DESPESAS
-    # ==================================================
+    # --------------------------------------------------------
+    # FINANCEIRO
+    # --------------------------------------------------------
 
     total_despesas = db.session.query(
         db.func.sum(Custo.valor)
@@ -462,10 +401,6 @@ def relatorios():
     ).scalar() or 0
 
 
-    # ==================================================
-    # TOTAL DE RECEITAS
-    # ==================================================
-
     total_receitas = db.session.query(
         db.func.sum(Custo.valor)
     ).filter(
@@ -473,40 +408,59 @@ def relatorios():
     ).scalar() or 0
 
 
-    # ==================================================
-    # SALDO
-    # ==================================================
-
     saldo = total_receitas - total_despesas
 
 
-    # ==================================================
-    # SITUAÇÃO DO REBANHO
-    # ==================================================
+    # --------------------------------------------------------
+    # REBANHO
+    # --------------------------------------------------------
+
+    total_animais = Animal.query.count()
+
 
     vacas_paridas = Animal.query.filter_by(
         situacao="Parida"
     ).count()
 
+
     vacas_gestantes = Animal.query.filter_by(
         situacao="Gestante"
     ).count()
+
 
     vacas_vazias = Animal.query.filter_by(
         situacao="Vazia"
     ).count()
 
 
-    # ==================================================
-    # TOTAL DE ANIMAIS
-    # ==================================================
+    # --------------------------------------------------------
+    # PERCENTUAL DO REBANHO
+    # --------------------------------------------------------
 
-    total_animais = Animal.query.count()
+    if total_animais > 0:
+
+        percentual_paridas = (
+            vacas_paridas * 100
+        ) / total_animais
+
+        percentual_gestantes = (
+            vacas_gestantes * 100
+        ) / total_animais
+
+        percentual_vazias = (
+            vacas_vazias * 100
+        ) / total_animais
+
+    else:
+
+        percentual_paridas = 0
+        percentual_gestantes = 0
+        percentual_vazias = 0
 
 
-    # ==================================================
-    # MÉDIA DE CUSTO POR ANIMAL
-    # ==================================================
+    # --------------------------------------------------------
+    # CUSTO MÉDIO POR ANIMAL
+    # --------------------------------------------------------
 
     if total_animais > 0:
 
@@ -519,45 +473,18 @@ def relatorios():
         media_por_animal = 0
 
 
-    # ==================================================
+    # --------------------------------------------------------
     # MOVIMENTAÇÕES
-    # ==================================================
+    # --------------------------------------------------------
 
     movimentacoes = Custo.query.order_by(
         Custo.data.desc()
     ).all()
 
 
-    # ==================================================
-    # PORCENTAGENS DO REBANHO
-    # ==================================================
-
-    if total_animais > 0:
-
-        percentual_paridas = round(
-            vacas_paridas * 100 / total_animais
-        )
-
-        percentual_gestantes = round(
-            vacas_gestantes * 100 / total_animais
-        )
-
-        percentual_vazias = round(
-            vacas_vazias * 100 / total_animais
-        )
-
-    else:
-
-        percentual_paridas = 0
-
-        percentual_gestantes = 0
-
-        percentual_vazias = 0
-
-
-    # ==================================================
-    # ENVIAR TUDO PARA O RELATÓRIO
-    # ==================================================
+    # --------------------------------------------------------
+    # ENVIAR DADOS PARA A PÁGINA
+    # --------------------------------------------------------
 
     return render_template(
         "relatorios.html",
@@ -588,9 +515,9 @@ def relatorios():
     )
 
 
-# ==================================================
+# ============================================================
 # INICIAR SERVIDOR
-# ==================================================
+# ============================================================
 
 if __name__ == "__main__":
 

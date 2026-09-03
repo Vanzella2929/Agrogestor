@@ -10,7 +10,11 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>{% block titulo %}Agrogestor{% endblock %}</title>
+    <title>
+        {% block titulo %}
+            Agrogestor
+        {% endblock %}
+    </title>
 
     <link
         rel="stylesheet"
@@ -19,46 +23,98 @@
 
 </head>
 
+
 <body>
+
+
+<!-- ==========================================================
+     CABEÇALHO
+     ========================================================== -->
 
 <header class="topo">
 
-    <div class="logo-area">
+    <div class="topo-conteudo">
 
-        <div class="logo-icone">
-            🐄
-        </div>
 
-        <div>
-            <h1>Agrogestor</h1>
-            <span>Gestão simples para sua propriedade</span>
-        </div>
+        <!-- LOGO -->
+
+        <a
+            href="{{ url_for('index') }}"
+            class="logo"
+        >
+
+            <div class="logo-icone">
+                🌱
+            </div>
+
+            <div class="logo-texto">
+
+                <strong>
+                    Agrogestor
+                </strong>
+
+                <small>
+                    Gestão da propriedade rural
+                </small>
+
+            </div>
+
+        </a>
+
+
+        <!-- MENU -->
+
+        <nav class="menu">
+
+            <a
+                href="{{ url_for('index') }}"
+            >
+                🏠
+                <span>Painel</span>
+            </a>
+
+
+            <a
+                href="{{ url_for('animais') }}"
+            >
+                🐄
+                <span>Rebanho</span>
+            </a>
+
+
+            <a
+                href="{{ url_for('custos') }}"
+            >
+                💰
+                <span>Financeiro</span>
+            </a>
+
+
+            <a
+                href="{{ url_for('relatorios') }}"
+            >
+                📊
+                <span>Relatórios</span>
+            </a>
+
+
+            <a
+                href="{{ url_for('agenda') }}"
+            >
+                📅
+                <span>Agenda</span>
+            </a>
+
+        </nav>
 
     </div>
 
-
-    <nav class="menu">
-
-        <a href="{{ url_for('index') }}">
-            🏠 Painel
-        </a>
-
-        <a href="{{ url_for('animais') }}">
-            🐄 Rebanho
-        </a>
-
-        <a href="{{ url_for('custos') }}">
-            💰 Financeiro
-        </a>
-
-        <a href="{{ url_for('relatorios') }}">
-            📊 Relatórios
-        </a>
-
-    </nav>
-
 </header>
 
+
+<!-- ==========================================================
+     CONTEÚDO PRINCIPAL
+     ========================================================== -->
 
 <main class="container">
 
@@ -69,14 +125,35 @@
 </main>
 
 
-<footer>
+<!-- ==========================================================
+     RODAPÉ
+     ========================================================== -->
 
-    <p>
-        Agrogestor © 2026 —
-        Gestão rural de forma simples.
-    </p>
+<footer class="rodape">
+
+    <div>
+
+        <strong>
+            🌱 Agrogestor
+        </strong>
+
+        <p>
+            Gestão simples para o produtor rural.
+        </p>
+
+    </div>
+
+
+    <div>
+
+        <small>
+            Sistema de controle de rebanho e produção
+        </small>
+
+    </div>
 
 </footer>
+
 
 </body>
 

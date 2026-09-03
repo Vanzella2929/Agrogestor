@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Avisos | Agrogestor
+{% endblock %}
+
+{% block conteudo %}
+
+<div class="boas-vindas">
+
+    <span class="pequeno-titulo">
+        ORGANIZAÇÃO DA PROPRIEDADE
+    </span>
+
+    <h2>
+        🔔 Avisos e lembretes
+    </h2>
+
+    <p>
+        Acompanhe os principais cuidados e atividades da sua propriedade.
+    </p>
+
+</div>
+
+
+<!-- ==========================================================
+     AVISOS
+     ========================================================== -->
+
+<section class="card">
+
+    <div class="titulo-card">
+
+        <div>
+
+            <span class="pequeno-titulo">
+                LEMBRETES
+            </span>
+
+            <h2>
+                🔔 Avisos importantes
+            </h2>
+
+        </div>
+
+        <a
+            href="{{ url_for('agenda') }}"
+            class="btn"
+        >
+            📅 Abrir agenda
+        </a>
+
+    </div>
+
+
+    <div class="avisos-grid">
+
+
+        <!-- REBANHO -->
+
+        <div class="aviso-card">
+
+            <div class="aviso-card-icone">
+                🐄
+            </div>
+
+            <div class="aviso-card-conteudo">
+
+                <span class="aviso-status">
+                    REBANHO
+                </span>
+
+                <h3>
+                    Conferir situação dos animais
+                </h3>
+
+                <p>
+                    Verifique se os animais estão com a situação
+                    corretamente cadastrada.
+                </p>
+
+                <a
+                    href="{{ url_for('animais') }}"
+                    class="aviso-link"
+                >
+                    Ver rebanho →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- FINANCEIRO -->
+
+        <div class="aviso-card">
+
+            <div class="aviso-card-icone">
+                💰
+            </div>
+
+            <div class="aviso-card-conteudo">
+
+                <span class="aviso-status">
+                    FINANCEIRO
+                </span>
+
+                <h3>
+                    Atualizar movimentações
+                </h3>
+
+                <p>
+                    Registre todas as receitas e despesas
+                    da propriedade.
+                </p>
+
+                <a
+                    href="{{ url_for('custos') }}"
+                    class="aviso-link"
+                >
+                    Ver financeiro →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- RELATÓRIO -->
+
+        <div class="aviso-card">
+
+            <div class="aviso-card-icone">
+                📊
+            </div>
+
+            <div class="aviso-card-conteudo">
+
+                <span class="aviso-status">
+                    RELATÓRIO
+                </span>
+
+                <h3>
+                    Conferir resultados
+                </h3>
+
+                <p>
+                    Analise os custos, receitas e o resultado
+                    da propriedade.
+                </p>
+
+                <a
+                    href="{{ url_for('relatorios') }}"
+                    class="aviso-link"
+                >
+                    Ver relatórios →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- AGENDA -->
+
+        <div class="aviso-card">
+
+            <div class="aviso-card-icone">
+                📅
+            </div>
+
+            <div class="aviso-card-conteudo">
+
+                <span class="aviso-status">
+                    AGENDA
+                </span>
+
+                <h3>
+                    Organizar atividades
+                </h3>
+
+                <p>
+                    Use o calendário para acompanhar
+                    as atividades da propriedade.
+                </p>
+
+                <a
+                    href="{{ url_for('agenda') }}"
+                    class="aviso-link"
+                >
+                    Abrir calendário →
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================================
+     ATENÇÃO
+     ========================================================== -->
+
+<section class="card aviso-atencao">
+
+    <div class="aviso-atencao-icone">
+        💡
+    </div>
+
+    <div>
+
+        <span class="pequeno-titulo">
+            DICA DO AGROGESTOR
+        </span>
+
+        <h2>
+            Mantenha os dados sempre atualizados
+        </h2>
+
+        <p>
+            Cadastros atualizados ajudam você a acompanhar
+            melhor o rebanho, controlar os gastos e tomar
+            decisões mais organizadas na propriedade.
+        </p>
+
+    </div>
+
+</section>
+
+
+{% endblock %}
