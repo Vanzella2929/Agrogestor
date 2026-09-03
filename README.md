@@ -17,3 +17,4 @@ Muitos produtores realizam o controle dos custos manualmente, dificultando a an√
 - Vitor Eloidio
 - Felipe Maia
 - Edvan Henrique
+
