@@ -1,46 +1,357 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block titulo %}
+Financeiro | Agrogestor
+{% endblock %}
+
 
 {% block conteudo %}
-<section class="card">
-  <h2>Lançamento Financeiro</h2>
-  <form action="{{ url_for('custos') }}" method="POST">
-    <select name="tipo" required>
-      <option value="" disabled selected>Selecione o Tipo</option>
-      <option value="Despesa">Despesa </option>
-      <option value="Receita">Lucro</option>
-    </select>
-    <input type="text" name="alvo" placeholder="Brinco ou Lote" required>
-    <input type="text" name="descricao" placeholder="Descrição (ex: Ração, Vacina, Venda)" required>
-    <input type="number" name="valor" placeholder="Valor (R$)" step="0.01" required>
-    <button type="submit">Registrar Lançamento</button>
-  </form>
+
+<div class="boas-vindas">
+
+    <div>
+
+        <span class="pequeno-titulo">
+            CONTROLE FINANCEIRO
+        </span>
+
+        <h2>
+            💰 Dinheiro da propriedade
+        </h2>
+
+        <p>
+            Registre tudo que entra e tudo que sai.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- RESUMO -->
+
+<div class="mini-financeiro">
+
+
+    <div class="mini-card receita">
+
+        <span>
+            💰 Receitas
+        </span>
+
+        <strong>
+            R$ {{ "%.2f"|format(total_receitas)|replace(".", ",") }}
+        </strong>
+
+    </div>
+
+
+    <div class="mini-card despesa">
+
+        <span>
+            💸 Despesas
+        </span>
+
+        <strong>
+            R$ {{ "%.2f"|format(total_despesas)|replace(".", ",") }}
+        </strong>
+
+    </div>
+
+
+    <div class="mini-card resultado">
+
+        <span>
+            📊 Resultado
+        </span>
+
+        <strong>
+            R$ {{ "%.2f"|format(saldo)|replace(".", ",") }}
+        </strong>
+
+    </div>
+
+
+</div>
+
+
+<!-- FORMULÁRIO -->
+
+<section class="card formulario-financeiro">
+
+    <div class="titulo-card">
+
+        <div>
+
+            <span class="pequeno-titulo">
+                NOVO LANÇAMENTO
+            </span>
+
+            <h2>
+                Registrar entrada ou saída
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <form
+        action="{{ url_for('custos') }}"
+        method="POST"
+    >
+
+        <div class="form-grid">
+
+
+            <div class="campo">
+
+                <label for="tipo">
+                    O que aconteceu? *
+                </label>
+
+                <select
+                    name="tipo"
+                    id="tipo"
+                    required
+                >
+
+                    <option
+                        value=""
+                        disabled
+                        selected
+                    >
+                        Escolha uma opção
+                    </option>
+
+                    <option value="Receita">
+                        💰 Entrou dinheiro
+                    </option>
+
+                    <option value="Despesa">
+                        💸 Saiu dinheiro
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="valor">
+                    Valor *
+                </label>
+
+                <input
+                    type="number"
+                    name="valor"
+                    id="valor"
+                    placeholder="Ex.: 1500,00"
+                    step="0.01"
+                    min="0.01"
+                    required
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="alvo">
+                    Animal ou lote *
+                </label>
+
+                <input
+                    type="text"
+                    name="alvo"
+                    id="alvo"
+                    placeholder="Ex.: Vaca 001 ou Lote 02"
+                    required
+                >
+
+            </div>
+
+
+            <div class="campo campo-largo">
+
+                <label for="descricao">
+                    O que foi comprado ou vendido? *
+                </label>
+
+                <input
+                    type="text"
+                    name="descricao"
+                    id="descricao"
+                    placeholder="Ex.: Venda de bezerro, ração, vacina..."
+                    required
+                >
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="botao-principal botao-financeiro"
+        >
+            ✓ Salvar lançamento
+        </button>
+
+    </form>
+
 </section>
 
-<section class="card">
-  <h2>Histórico de Movimentações</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Tipo</th>
-        <th>Alvo</th>
-        <th>Descrição</th>
-        <th>Valor</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for custo in custos %}
-      <tr>
-        <td>{{ custo.tipo }}</td>
-        <td>{{ custo.alvo }}</td>
-        <td>{{ custo.descricao }}</td>
-        <td>R$ {{ "%.2f"|format(custo.valor) }}</td>
-      </tr>
-      {% else %}
-      <tr>
-        <td colspan="4">Nenhuma movimentação registrada.</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+
+<!-- HISTÓRICO -->
+
+<section class="card tabela-card">
+
+    <div class="titulo-card">
+
+        <div>
+
+            <span class="pequeno-titulo">
+                HISTÓRICO
+            </span>
+
+            <h2>
+                Tudo que foi registrado
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    {% if custos %}
+
+    <div class="tabela-responsiva">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Animal / Lote</th>
+                    <th>Valor</th>
+                    <th>Ação</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for custo in custos %}
+
+                <tr>
+
+                    <td>
+
+                        {{ custo.data.strftime("%d/%m/%Y") }}
+
+                    </td>
+
+
+                    <td>
+
+                        {% if custo.tipo == "Receita" %}
+
+                        <span class="badge receita-badge">
+                            ↑ Entrada
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge despesa-badge">
+                            ↓ Saída
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+                        <strong>
+                            {{ custo.descricao }}
+                        </strong>
+                    </td>
+
+
+                    <td>
+                        {{ custo.alvo }}
+                    </td>
+
+
+                    <td>
+
+                        {% if custo.tipo == "Receita" %}
+
+                        <span class="valor-receita">
+                            + R$ {{ "%.2f"|format(custo.valor)|replace(".", ",") }}
+                        </span>
+
+                        {% else %}
+
+                        <span class="valor-despesa">
+                            - R$ {{ "%.2f"|format(custo.valor)|replace(".", ",") }}
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+                        <a
+                            href="{{ url_for('excluir_animal', id=custo.id) }}"
+                            class="link-excluir"
+                            onclick="return confirm('Excluir este lançamento financeiro?')"
+                        >
+                            Excluir
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="vazio">
+
+        <div>
+            📋
+        </div>
+
+        <h3>
+            Nenhum lançamento registrado
+        </h3>
+
+        <p>
+            Comece registrando uma receita ou despesa.
+        </p>
+
+    </div>
+
+    {% endif %}
+
 </section>
+
 {% endblock %}

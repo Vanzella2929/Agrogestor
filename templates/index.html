@@ -1,38 +1,391 @@
+{% extends "base.html" %}
 
-{% extends 'base.html' %}
+{% block titulo %}
+Painel | Agrogestor
+{% endblock %}
+
 
 {% block conteudo %}
 
-<h2>Visão Geral da Propriedade</h2>
+<div class="boas-vindas">
 
-<div class="grid-cards">
+    <div>
 
-    <div class="card">
-        <h3>Total de Animais</h3>
+        <span class="pequeno-titulo">
+            PAINEL DA PROPRIEDADE
+        </span>
 
-        <p id="total-animais">
-            {{ total_animais }}
+        <h2>
+            Olá! 👋
+        </h2>
+
+        <p>
+            Veja rapidamente como está o seu rebanho
+            e o dinheiro da propriedade.
         </p>
+
     </div>
 
-
-    <div class="card">
-        <h3>Custos Acumulados</h3>
-
-        <p id="total-custos">
-            R$ {{ "%.2f"|format(total_custos)|replace(".", ",") }}
-        </p>
-    </div>
-
-
-    <div class="card">
-        <h3>Receitas Totais</h3>
-
-        <p id="total-receitas">
-            R$ {{ "%.2f"|format(total_receitas)|replace(".", ",") }}
-        </p>
-    </div>
+    <a
+        href="{{ url_for('custos') }}"
+        class="botao-principal"
+    >
+        + Registrar movimentação
+    </a>
 
 </div>
+
+
+<!-- RESUMO FINANCEIRO -->
+
+<div class="cards-financeiros">
+
+
+    <div class="financeiro-card receita">
+
+        <div class="icone-card">
+            💰
+        </div>
+
+        <div>
+
+            <span>
+                Dinheiro que entrou
+            </span>
+
+            <strong>
+                R$ {{ "%.2f"|format(total_receitas)|replace(".", ",") }}
+            </strong>
+
+            <small>
+                Total de receitas
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="financeiro-card despesa">
+
+        <div class="icone-card">
+            💸
+        </div>
+
+        <div>
+
+            <span>
+                Dinheiro que saiu
+            </span>
+
+            <strong>
+                R$ {{ "%.2f"|format(total_despesas)|replace(".", ",") }}
+            </strong>
+
+            <small>
+                Total de despesas
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="financeiro-card resultado">
+
+        <div class="icone-card">
+            📈
+        </div>
+
+        <div>
+
+            <span>
+                Resultado
+            </span>
+
+            <strong>
+                R$ {{ "%.2f"|format(saldo)|replace(".", ",") }}
+            </strong>
+
+            {% if saldo >= 0 %}
+
+                <small>
+                    Resultado positivo
+                </small>
+
+            {% else %}
+
+                <small>
+                    Atenção aos gastos
+                </small>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- REBANHO -->
+
+<div class="secao-titulo">
+
+    <div>
+
+        <span class="pequeno-titulo">
+            REBANHO
+        </span>
+
+        <h2>
+            Situação das suas vacas
+        </h2>
+
+    </div>
+
+    <a
+        href="{{ url_for('animais') }}"
+        class="link-ver"
+    >
+        Ver rebanho →
+    </a>
+
+</div>
+
+
+<div class="cards-rebanho">
+
+
+    <div class="rebanho-card">
+
+        <span class="animal-icone">
+            🐄
+        </span>
+
+        <div>
+
+            <strong>
+                {{ total_animais }}
+            </strong>
+
+            <span>
+                Animais cadastrados
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="rebanho-card parida">
+
+        <span class="animal-icone">
+            🐄
+        </span>
+
+        <div>
+
+            <strong>
+                {{ vacas_paridas }}
+            </strong>
+
+            <span>
+                Vacas paridas
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="rebanho-card gestante">
+
+        <span class="animal-icone">
+            🐄
+        </span>
+
+        <div>
+
+            <strong>
+                {{ vacas_gestantes }}
+            </strong>
+
+            <span>
+                Vacas gestantes
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="rebanho-card vazia">
+
+        <span class="animal-icone">
+            🐄
+        </span>
+
+        <div>
+
+            <strong>
+                {{ vacas_vazias }}
+            </strong>
+
+            <span>
+                Vacas vazias
+            </span>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- ÚLTIMAS MOVIMENTAÇÕES -->
+
+<div class="secao-titulo">
+
+    <div>
+
+        <span class="pequeno-titulo">
+            FINANCEIRO
+        </span>
+
+        <h2>
+            Últimas movimentações
+        </h2>
+
+    </div>
+
+    <a
+        href="{{ url_for('custos') }}"
+        class="link-ver"
+    >
+        Ver tudo →
+    </a>
+
+</div>
+
+
+<section class="card tabela-card">
+
+    {% if ultimas_movimentacoes %}
+
+    <div class="tabela-responsiva">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Animal / Lote</th>
+                    <th>Valor</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for item in ultimas_movimentacoes %}
+
+                <tr>
+
+                    <td>
+
+                        {% if item.tipo == "Receita" %}
+
+                        <span class="badge receita-badge">
+                            ↑ Receita
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge despesa-badge">
+                            ↓ Despesa
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+                        <strong>
+                            {{ item.descricao }}
+                        </strong>
+                    </td>
+
+
+                    <td>
+                        {{ item.alvo }}
+                    </td>
+
+
+                    <td>
+
+                        {% if item.tipo == "Receita" %}
+
+                        <span class="valor-receita">
+                            + R$ {{ "%.2f"|format(item.valor)|replace(".", ",") }}
+                        </span>
+
+                        {% else %}
+
+                        <span class="valor-despesa">
+                            - R$ {{ "%.2f"|format(item.valor)|replace(".", ",") }}
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="vazio">
+
+        <div>
+            💰
+        </div>
+
+        <h3>
+            Nenhuma movimentação ainda
+        </h3>
+
+        <p>
+            Registre uma receita ou despesa
+            para acompanhar o resultado da propriedade.
+        </p>
+
+        <a
+            href="{{ url_for('custos') }}"
+            class="botao-principal"
+        >
+            Registrar agora
+        </a>
+
+    </div>
+
+    {% endif %}
+
+</section>
 
 {% endblock %}

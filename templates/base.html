@@ -1,25 +1,83 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agrogestor</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-  <header>
-    <h1>Agrogestor</h1>
-    <nav>
-      <a href="{{ url_for('index') }}">Painel</a>
-      <a href="{{ url_for('animais') }}">Animais</a>
-      <a href="{{ url_for('custos') }}">Custos e Receitas</a>
-      <a href="{{ url_for('relatorios') }}">Relatórios</a>
-    </nav>
-  </header>
 
-  <main class="container">
-    {% block conteudo %}{% endblock %}
-  </main>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{% block titulo %}Agrogestor{% endblock %}</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<header class="topo">
+
+    <div class="logo-area">
+
+        <div class="logo-icone">
+            🐄
+        </div>
+
+        <div>
+            <h1>Agrogestor</h1>
+            <span>Gestão simples para sua propriedade</span>
+        </div>
+
+    </div>
+
+
+    <nav class="menu">
+
+        <a href="{{ url_for('index') }}">
+            🏠 Painel
+        </a>
+
+        <a href="{{ url_for('animais') }}">
+            🐄 Rebanho
+        </a>
+
+        <a href="{{ url_for('custos') }}">
+            💰 Financeiro
+        </a>
+
+        <a href="{{ url_for('relatorios') }}">
+            📊 Relatórios
+        </a>
+
+    </nav>
+
+</header>
+
+
+<main class="container">
+
+    {% block conteudo %}
+
+    {% endblock %}
+
+</main>
+
+
+<footer>
+
+    <p>
+        Agrogestor © 2026 —
+        Gestão rural de forma simples.
+    </p>
+
+</footer>
+
 </body>
+
 </html>

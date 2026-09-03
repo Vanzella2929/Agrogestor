@@ -1,110 +1,169 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block titulo %}
+Cadastrar Vaca | Agrogestor
+{% endblock %}
+
 
 {% block conteudo %}
 
-<div class="cabecalho-pagina">
-    <h2>Cadastrar Nova Vaca</h2>
+<div class="pagina-formulario">
 
-    <a href="{{ url_for('animais') }}" class="btn">
-        Voltar
-    </a>
+    <div class="formulario-topo">
+
+        <span class="pequeno-titulo">
+            NOVO ANIMAL
+        </span>
+
+        <h2>
+            🐄 Cadastrar nova vaca
+        </h2>
+
+        <p>
+            Informe os dados abaixo para adicionar
+            a vaca ao seu rebanho.
+        </p>
+
+    </div>
+
+
+    <section class="card formulario-card">
+
+        <form
+            action="{{ url_for('cadastrar_animal') }}"
+            method="POST"
+        >
+
+
+            <div class="campo">
+
+                <label for="brinco">
+                    Número do brinco *
+                </label>
+
+                <input
+                    type="text"
+                    id="brinco"
+                    name="brinco"
+                    placeholder="Ex.: 001"
+                    required
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="nome">
+                    Nome da vaca
+                </label>
+
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    placeholder="Ex.: Mimosa"
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="raca">
+                    Raça *
+                </label>
+
+                <input
+                    type="text"
+                    id="raca"
+                    name="raca"
+                    placeholder="Ex.: Nelore"
+                    required
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="situacao">
+                    Situação atual *
+                </label>
+
+                <select
+                    id="situacao"
+                    name="situacao"
+                    required
+                >
+
+                    <option value="Vazia">
+                        Vazia
+                    </option>
+
+                    <option value="Gestante">
+                        Gestante
+                    </option>
+
+                    <option value="Parida">
+                        Parida
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="lote_id">
+                    Lote
+                </label>
+
+                <select
+                    id="lote_id"
+                    name="lote_id"
+                >
+
+                    <option value="">
+                        Sem lote
+                    </option>
+
+                    {% for lote in lotes %}
+
+                    <option value="{{ lote.id }}">
+                        {{ lote.nome }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <div class="botoes-formulario">
+
+                <a
+                    href="{{ url_for('animais') }}"
+                    class="botao-secundario"
+                >
+                    Cancelar
+                </a>
+
+                <button
+                    type="submit"
+                    class="botao-principal"
+                >
+                    ✓ Cadastrar vaca
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
 </div>
-
-<section class="card">
-
-    <form action="{{ url_for('cadastrar_animal') }}" method="POST">
-
-        <label for="brinco">
-            Brinco
-        </label>
-
-        <input
-            type="text"
-            id="brinco"
-            name="brinco"
-            placeholder="Digite o número do brinco"
-            required
-        >
-
-
-        <label for="nome">
-            Nome
-        </label>
-
-        <input
-            type="text"
-            id="nome"
-            name="nome"
-            placeholder="Digite o nome do animal"
-        >
-
-
-        <label for="raca">
-            Raça
-        </label>
-
-        <input
-            type="text"
-            id="raca"
-            name="raca"
-            placeholder="Ex.: Nelore"
-            required
-        >
-
-
-        <label for="situacao">
-            Situação
-        </label>
-
-        <select
-            id="situacao"
-            name="situacao"
-            required
-        >
-            <option value="Vazia">
-                Vazia
-            </option>
-
-            <option value="Gestante">
-                Gestante
-            </option>
-
-            <option value="Parida">
-                Parida
-            </option>
-        </select>
-
-
-        <label for="lote_id">
-            Lote
-        </label>
-
-        <select
-            id="lote_id"
-            name="lote_id"
-        >
-
-            <option value="">
-                Sem Lote
-            </option>
-
-            {% for lote in lotes %}
-
-            <option value="{{ lote.id }}">
-                {{ lote.nome }}
-            </option>
-
-            {% endfor %}
-
-        </select>
-
-
-        <button type="submit">
-            Cadastrar Animal
-        </button>
-
-    </form>
-
-</section>
 
 {% endblock %}

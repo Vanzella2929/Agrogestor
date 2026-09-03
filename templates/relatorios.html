@@ -1,94 +1,494 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block titulo %}
+Relatórios | Agrogestor
+{% endblock %}
 
 {% block conteudo %}
 
-<section class="card">
+<div class="boas-vindas">
 
-    <h2>Resumo Financeiro</h2>
+    <span class="pequeno-titulo">
+        CONTROLE DA PROPRIEDADE
+    </span>
 
-    <table>
+    <h2>
+        📊 Relatório Geral
+    </h2>
 
-        <thead>
-            <tr>
-                <th>Categoria</th>
-                <th>Valor</th>
-            </tr>
-        </thead>
+    <p>
+        Confira as receitas, despesas e a situação do seu rebanho.
+    </p>
 
-        <tbody>
+</div>
 
-            <tr>
-                <td>Total de Despesas</td>
 
-                <td>
-                    R$ {{ "%.2f"|format(total_despesas)|replace(".", ",") }}
-                </td>
-            </tr>
+<!-- RESULTADO -->
 
-            <tr>
-                <td>Total de Receitas</td>
+<section class="relatorio-destaque">
 
-                <td>
-                    R$ {{ "%.2f"|format(total_receitas)|replace(".", ",") }}
-                </td>
-            </tr>
+    <span class="pequeno-titulo">
+        RESULTADO DA PROPRIEDADE
+    </span>
 
-            <tr>
-                <td>Total de Animais</td>
+    <h2>
+        R$ {{ "%.2f"|format(saldo)|replace(".", ",") }}
+    </h2>
 
-                <td>
-                    {{ total_animais }}
-                </td>
-            </tr>
+    {% if saldo > 0 %}
 
-            <tr>
-                <td>Média de Custo por Animal</td>
+        <p>
+            ✅ Resultado positivo: as receitas são maiores que as despesas.
+        </p>
 
-                <td>
-                    R$ {{ "%.2f"|format(media_por_animal)|replace(".", ",") }}
-                </td>
-            </tr>
+    {% elif saldo < 0 %}
 
-        </tbody>
+        <p>
+            ⚠️ Atenção: as despesas são maiores que as receitas.
+        </p>
 
-    </table>
+    {% else %}
+
+        <p>
+            ℹ️ As receitas e despesas estão equilibradas.
+        </p>
+
+    {% endif %}
 
 </section>
 
 
+<!-- RESUMO FINANCEIRO -->
+
+<div class="relatorio-grid">
+
+    <div class="relatorio-card">
+
+        <div class="icone-relatorio">
+            💰
+        </div>
+
+        <div>
+
+            <span>
+                Receitas
+            </span>
+
+            <strong>
+                R$ {{ "%.2f"|format(total_receitas)|replace(".", ",") }}
+            </strong>
+
+            <small>
+                Dinheiro que entrou
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="relatorio-card">
+
+        <div class="icone-relatorio">
+            💸
+        </div>
+
+        <div>
+
+            <span>
+                Despesas
+            </span>
+
+            <strong>
+                R$ {{ "%.2f"|format(total_despesas)|replace(".", ",") }}
+            </strong>
+
+            <small>
+                Dinheiro que saiu
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="relatorio-card">
+
+        <div class="icone-relatorio">
+            🐄
+        </div>
+
+        <div>
+
+            <span>
+                Rebanho
+            </span>
+
+            <strong>
+                {{ total_animais }}
+            </strong>
+
+            <small>
+                Animais cadastrados
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="relatorio-card">
+
+        <div class="icone-relatorio">
+            🧮
+        </div>
+
+        <div>
+
+            <span>
+                Custo médio
+            </span>
+
+            <strong>
+                R$ {{ "%.2f"|format(media_por_animal)|replace(".", ",") }}
+            </strong>
+
+            <small>
+                Por animal
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SITUAÇÃO DO REBANHO -->
+
 <section class="card">
 
-    <h2>Situação do Rebanho</h2>
+    <span class="pequeno-titulo">
+        REBANHO
+    </span>
 
-    <table>
+    <h2>
+        🐄 Situação das vacas
+    </h2>
 
-        <thead>
-            <tr>
-                <th>Situação</th>
-                <th>Quantidade</th>
-            </tr>
-        </thead>
+    <p>
+        Veja a quantidade de vacas em cada situação.
+    </p>
 
-        <tbody>
 
-            <tr>
-                <td>Vacas Paridas</td>
-                <td>{{ vacas_paridas }}</td>
-            </tr>
+    <!-- PARIDAS -->
 
-            <tr>
-                <td>Vacas Gestantes</td>
-                <td>{{ vacas_gestantes }}</td>
-            </tr>
+    <div class="barra-item">
 
-            <tr>
-                <td>Vacas Vazias</td>
-                <td>{{ vacas_vazias }}</td>
-            </tr>
+        <div class="barra-texto">
 
-        </tbody>
+            <span>
+                🐄 Vacas paridas
+            </span>
 
-    </table>
+            <strong>
+                {{ vacas_paridas }}
+            </strong>
+
+        </div>
+
+        <div class="barra-fundo">
+
+            <div
+                class="barra"
+                style="width: {{ percentual_paridas }}%;">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- GESTANTES -->
+
+    <div class="barra-item">
+
+        <div class="barra-texto">
+
+            <span>
+                🤰 Vacas gestantes
+            </span>
+
+            <strong>
+                {{ vacas_gestantes }}
+            </strong>
+
+        </div>
+
+        <div class="barra-fundo">
+
+            <div
+                class="barra"
+                style="width: {{ percentual_gestantes }}%;">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- VAZIAS -->
+
+    <div class="barra-item">
+
+        <div class="barra-texto">
+
+            <span>
+                ⚪ Vacas vazias
+            </span>
+
+            <strong>
+                {{ vacas_vazias }}
+            </strong>
+
+        </div>
+
+        <div class="barra-fundo">
+
+            <div
+                class="barra"
+                style="width: {{ percentual_vazias }}%;">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- MOVIMENTAÇÕES -->
+
+<section class="card tabela-card">
+
+    <span class="pequeno-titulo">
+        CONTROLE FINANCEIRO
+    </span>
+
+    <h2>
+        💰 Entradas e saídas
+    </h2>
+
+    <p>
+        Confira tudo que foi registrado no sistema.
+    </p>
+
+
+    {% if movimentacoes %}
+
+    <div class="tabela-responsiva">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Data
+                    </th>
+
+                    <th>
+                        Tipo
+                    </th>
+
+                    <th>
+                        Descrição
+                    </th>
+
+                    <th>
+                        Referência
+                    </th>
+
+                    <th>
+                        Valor
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for item in movimentacoes %}
+
+                <tr>
+
+                    <td>
+                        {{ item.data.strftime("%d/%m/%Y") }}
+                    </td>
+
+
+                    <td>
+
+                        {% if item.tipo == "Receita" %}
+
+                            <span class="badge receita-badge">
+                                ↑ Receita
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge despesa-badge">
+                                ↓ Despesa
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+                        {{ item.descricao }}
+                    </td>
+
+
+                    <td>
+                        {{ item.alvo }}
+                    </td>
+
+
+                    <td>
+
+                        {% if item.tipo == "Receita" %}
+
+                            <span class="valor-receita">
+                                + R$
+                                {{ "%.2f"|format(item.valor)|replace(".", ",") }}
+                            </span>
+
+                        {% else %}
+
+                            <span class="valor-despesa">
+                                - R$
+                                {{ "%.2f"|format(item.valor)|replace(".", ",") }}
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="vazio">
+
+        <div>
+            📊
+        </div>
+
+        <h3>
+            Nenhuma movimentação registrada
+        </h3>
+
+        <p>
+            Cadastre uma receita ou despesa para ela aparecer aqui.
+        </p>
+
+        <a
+            href="{{ url_for('custos') }}"
+            class="btn">
+
+            + Registrar movimentação
+
+        </a>
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+
+<!-- RESUMO FINAL -->
+
+<section class="card">
+
+    <span class="pequeno-titulo">
+        RESUMO
+    </span>
+
+    <h2>
+        📋 Resumo da propriedade
+    </h2>
+
+
+    <div class="resumo-informacoes">
+
+
+        <div>
+
+            <span>
+                💰 Entradas
+            </span>
+
+            <strong>
+                R$ {{ "%.2f"|format(total_receitas)|replace(".", ",") }}
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                💸 Saídas
+            </span>
+
+            <strong>
+                R$ {{ "%.2f"|format(total_despesas)|replace(".", ",") }}
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                📈 Resultado
+            </span>
+
+            <strong>
+                R$ {{ "%.2f"|format(saldo)|replace(".", ",") }}
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                🐄 Animais
+            </span>
+
+            <strong>
+                {{ total_animais }}
+            </strong>
+
+        </div>
+
+
+    </div>
 
 </section>
 
