@@ -18,4 +18,3 @@ Atualmente, muitos pequenos e médios produtores realizam o controle de seus cus
 - **Backend:** Python, Flask, SQLAlchemy (Banco de Dados SQLite)
 - **Frontend:** HTML5, CSS3, Jinja2
 - **Hospedagem/Deploy:** PythonAnywhere
-
