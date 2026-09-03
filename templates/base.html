@@ -1,25 +1,61 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agrogestor</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-  <header>
-    <h1>Agrogestor</h1>
-    <nav>
-      <a href="{{ url_for('index') }}">Painel</a>
-      <a href="{{ url_for('animais') }}">Animais</a>
-      <a href="{{ url_for('custos') }}">Custos e Receitas</a>
-      <a href="{{ url_for('relatorios') }}">Relatórios</a>
-    </nav>
-  </header>
 
-  <main class="container">
-    {% block conteudo %}{% endblock %}
-  </main>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Agrogestor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <header class="topbar">
+
+        <div class="logo">
+            <span class="logo-icon">🌱</span>
+            <span>Agrogestor</span>
+        </div>
+
+        <nav>
+
+            <a href="{{ url_for('index') }}">
+                🏠 Painel
+            </a>
+
+            <a href="{{ url_for('animais') }}">
+                🐄 Animais
+            </a>
+
+            <a href="{{ url_for('custos') }}">
+                💰 Custos e Receitas
+            </a>
+
+            <a href="{{ url_for('relatorios') }}">
+                📊 Relatórios
+            </a>
+
+            <a href="{{ url_for('logout') }}" class="btn-sair">
+                Sair
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <main class="container">
+
+        {% block conteudo %}{% endblock %}
+
+    </main>
+
 </body>
+
 </html>

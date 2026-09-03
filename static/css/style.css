@@ -1,3 +1,7 @@
+/* ==========================================
+   CONFIGURAÇÕES GERAIS
+========================================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -6,229 +10,387 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: #f4f6f5;
-    color: #222;
+    background: #f3f6f3;
+    color: #263328;
     min-height: 100vh;
 }
 
+
 /* ==========================================
    CABEÇALHO
-   ========================================== */
+========================================== */
 
 header {
-    background-color: #2e7d32;
+    background: linear-gradient(135deg, #1b5e20, #2e7d32);
     color: white;
-    padding: 20px 40px;
+
+    min-height: 75px;
+    padding: 15px 40px;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
 }
 
+
+/* NOME DO SISTEMA */
+
 header h1 {
-    font-size: 28px;
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 0.3px;
 }
+
+
+/* ==========================================
+   MENU
+========================================== */
 
 nav {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    gap: 6px;
 }
 
 nav a {
     color: white;
     text-decoration: none;
-    padding: 10px 15px;
-    border-radius: 6px;
-    transition: background-color 0.2s;
+
+    padding: 11px 15px;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+
+    transition: all 0.2s ease;
 }
 
 nav a:hover {
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.16);
+    transform: translateY(-1px);
 }
+
 
 /* ==========================================
    CONTAINER
-   ========================================== */
+========================================== */
 
 .container {
-    width: 90%;
+    width: 92%;
     max-width: 1200px;
-    margin: 30px auto;
+
+    margin: 0 auto;
+
+    padding: 40px 0;
 }
+
 
 /* ==========================================
    TÍTULOS
-   ========================================== */
+========================================== */
 
 h2 {
-    margin-bottom: 20px;
-    color: #2e7d32;
+    margin-bottom: 25px;
+
+    color: #216b29;
+
+    font-size: 28px;
 }
 
 h3 {
     margin-bottom: 10px;
 }
 
+
 /* ==========================================
    CARDS
-   ========================================== */
+========================================== */
 
 .card {
     background-color: white;
-    padding: 25px;
+
+    padding: 28px;
+
     margin-bottom: 25px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    border-radius: 16px;
+
+    border: 1px solid #e5ebe5;
+
+    box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.06);
+
+    transition: all 0.2s ease;
 }
+
+.card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.10);
+}
+
+
+/* ==========================================
+   CARDS DO PAINEL
+========================================== */
 
 .grid-cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 22px;
+
     margin-bottom: 30px;
 }
 
 .grid-cards .card {
     margin-bottom: 0;
+
     text-align: center;
+
+    min-height: 155px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+.grid-cards .card h3 {
+    color: #68736a;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    margin-bottom: 18px;
 }
 
 .grid-cards .card p {
-    font-size: 28px;
+    font-size: 30px;
+
     font-weight: bold;
+
     color: #2e7d32;
 }
 
+
 /* ==========================================
    CABEÇALHO DAS PÁGINAS
-   ========================================== */
+========================================== */
 
 .cabecalho-pagina {
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
-    margin-bottom: 20px;
+
+    margin-bottom: 25px;
 }
 
 .cabecalho-pagina h2 {
     margin-bottom: 0;
 }
 
+
 /* ==========================================
    BOTÕES
-   ========================================== */
+========================================== */
 
 .btn,
 button {
     display: inline-block;
-    background-color: #2e7d32;
+
+    background: linear-gradient(
+        135deg,
+        #2e7d32,
+        #388e3c
+    );
+
     color: white;
+
     border: none;
-    padding: 11px 18px;
-    border-radius: 6px;
+
+    padding: 12px 20px;
+
+    border-radius: 9px;
+
     text-decoration: none;
+
     cursor: pointer;
+
     font-size: 15px;
-    transition: background-color 0.2s;
+
+    font-weight: 600;
+
+    transition: all 0.2s ease;
 }
 
 .btn:hover,
 button:hover {
-    background-color: #1b5e20;
+    background: #1b5e20;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 12px rgba(46, 125, 50, 0.25);
 }
+
 
 /* ==========================================
    FORMULÁRIOS
-   ========================================== */
+========================================== */
 
 form {
     display: flex;
+
     flex-direction: column;
+
     gap: 10px;
 }
 
 label {
     font-weight: bold;
+
     margin-top: 5px;
+
+    color: #39453b;
 }
 
 input,
 select {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+
+    padding: 13px 14px;
+
+    border: 1px solid #d4dad4;
+
+    border-radius: 9px;
+
     font-size: 15px;
+
     background-color: white;
+
+    transition: all 0.2s ease;
 }
 
 input:focus,
 select:focus {
     outline: none;
+
     border-color: #2e7d32;
-    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.15);
+
+    box-shadow:
+        0 0 0 3px rgba(46, 125, 50, 0.12);
 }
 
 button {
-    margin-top: 10px;
+    margin-top: 12px;
 }
+
 
 /* ==========================================
    TABELAS
-   ========================================== */
+========================================== */
 
 table {
     width: 100%;
-    border-collapse: collapse;
+
+    border-collapse: separate;
+
+    border-spacing: 0;
+
+    overflow: hidden;
+
     background-color: white;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.06);
 }
 
 thead {
-    background-color: #2e7d32;
+    background: #2e7d32;
+
     color: white;
 }
 
 th,
 td {
-    padding: 14px;
+    padding: 15px;
+
     text-align: left;
-    border-bottom: 1px solid #ddd;
+
+    border-bottom: 1px solid #e8ece8;
+}
+
+th {
+    font-size: 14px;
+}
+
+td {
+    font-size: 14px;
+}
+
+tbody tr {
+    transition: background-color 0.15s;
 }
 
 tbody tr:hover {
-    background-color: #f5f5f5;
+    background-color: #f4f8f4;
 }
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
 
 /* ==========================================
    TAGS DE SITUAÇÃO
-   ========================================== */
+========================================== */
 
 .tag {
     display: inline-block;
-    padding: 5px 10px;
+
+    padding: 6px 11px;
+
     border-radius: 20px;
+
     font-size: 13px;
+
     font-weight: bold;
 }
 
 .tag-sucesso {
-    background-color: #d4edda;
-    color: #155724;
+    background-color: #dff3e1;
+
+    color: #176b24;
 }
 
 .tag-alerta {
     background-color: #fff3cd;
+
     color: #856404;
 }
 
 .tag-info {
-    background-color: #d1ecf1;
+    background-color: #d9f0f3;
+
     color: #0c5460;
 }
 
+
 /* ==========================================
    LINKS
-   ========================================== */
+========================================== */
 
 a {
     color: #2e7d32;
@@ -236,7 +398,9 @@ a {
 
 table a {
     color: #c62828;
+
     text-decoration: none;
+
     font-weight: bold;
 }
 
@@ -244,20 +408,43 @@ table a:hover {
     text-decoration: underline;
 }
 
+
+/* ==========================================
+   BOTÃO SAIR
+========================================== */
+
+.btn-sair {
+    margin-left: 8px;
+
+    background-color: rgba(255, 255, 255, 0.15);
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+nav a.btn-sair:hover {
+    background-color: #c62828;
+
+    color: white;
+}
+
+
 /* ==========================================
    RESPONSIVIDADE
-   ========================================== */
+========================================== */
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
 
     header {
         flex-direction: column;
+
         gap: 15px;
+
         padding: 20px;
     }
 
     nav {
         flex-wrap: wrap;
+
         justify-content: center;
     }
 
@@ -267,17 +454,41 @@ table a:hover {
 
     .cabecalho-pagina {
         flex-direction: column;
+
         align-items: flex-start;
+
         gap: 15px;
     }
+}
+
+
+@media (max-width: 600px) {
 
     .container {
-        width: 95%;
+        width: 94%;
+
+        padding: 25px 0;
+    }
+
+    header h1 {
+        font-size: 23px;
+    }
+
+    nav a {
+        padding: 9px 11px;
+
+        font-size: 13px;
+    }
+
+    h2 {
+        font-size: 23px;
     }
 
     table {
         display: block;
+
         overflow-x: auto;
+
         white-space: nowrap;
     }
 }

@@ -1,8 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+from functools import wraps
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
+
+app.secret_key = "agrogestor123"
 
 # ==================================================
 # CONFIGURAÇÃO
@@ -15,12 +19,261 @@ db = SQLAlchemy(app)
 
 
 # ==================================================
+# TABELA DE USUÁRIOS
+# ==================================================
+
+class Usuario(db.Model):
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    nome = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    email = db.Column(
+        db.String(150),
+        unique=True,
+        nullable=False
+    )
+
+    senha = db.Column(
+        db.String(255),
+        nullable=False
+    )
+
+    data_cadastro = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+
+# ==================================================
+# PROTEÇÃO DAS PÁGINAS
+# ==================================================
+
+def login_required(f):
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+
+        if "usuario_id" not in session:
+            return redirect(url_for("login"))
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
+# ==================================================
+# LOGIN
+# ==================================================
+
+@app.route(
+    "/login",
+    methods=["GET", "POST"]
+)
+def login():
+
+    if request.method == "POST":
+
+        email = request.form.get(
+            "email",
+            ""
+        ).strip().lower()
+
+        senha = request.form.get(
+            "senha",
+            ""
+        )
+
+        usuario = Usuario.query.filter_by(
+            email=email
+        ).first()
+
+        if usuario and check_password_hash(
+            usuario.senha,
+            senha
+        ):
+
+            session["usuario_id"] = usuario.id
+            session["usuario_nome"] = usuario.nome
+            session["usuario_email"] = usuario.email
+
+            return redirect(
+                url_for("index")
+            )
+
+        flash(
+            "E-mail ou senha incorretos.",
+            "erro"
+        )
+
+    return render_template(
+        "login.html"
+    )
+
+
+# ==================================================
+# CADASTRO
+# ==================================================
+
+@app.route(
+    "/cadastro",
+    methods=["GET", "POST"]
+)
+def cadastro():
+
+    if request.method == "POST":
+
+        nome = request.form.get(
+            "nome",
+            ""
+        ).strip()
+
+        email = request.form.get(
+            "email",
+            ""
+        ).strip().lower()
+
+        senha = request.form.get(
+            "senha",
+            ""
+        )
+
+        confirmar_senha = request.form.get(
+            "confirmar_senha",
+            ""
+        )
+
+        # Verificar campos
+        if not nome or not email or not senha:
+
+            flash(
+                "Preencha todos os campos.",
+                "erro"
+            )
+
+            return redirect(
+                url_for("cadastro")
+            )
+
+        # Verificar e-mail
+        if "@" not in email:
+
+            flash(
+                "Digite um e-mail válido.",
+                "erro"
+            )
+
+            return redirect(
+                url_for("cadastro")
+            )
+
+        # Verificar tamanho da senha
+        if len(senha) < 6:
+
+            flash(
+                "A senha precisa ter pelo menos 6 caracteres.",
+                "erro"
+            )
+
+            return redirect(
+                url_for("cadastro")
+            )
+
+        # Confirmar senha
+        if senha != confirmar_senha:
+
+            flash(
+                "As senhas não são iguais.",
+                "erro"
+            )
+
+            return redirect(
+                url_for("cadastro")
+            )
+
+        # Verificar se e-mail já existe
+        usuario_existente = Usuario.query.filter_by(
+            email=email
+        ).first()
+
+        if usuario_existente:
+
+            flash(
+                "Este e-mail já está cadastrado.",
+                "erro"
+            )
+
+            return redirect(
+                url_for("cadastro")
+            )
+
+        # Proteger senha
+        senha_protegida = generate_password_hash(
+            senha
+        )
+
+        # Criar usuário
+        novo_usuario = Usuario(
+            nome=nome,
+            email=email,
+            senha=senha_protegida
+        )
+
+        db.session.add(
+            novo_usuario
+        )
+
+        db.session.commit()
+
+        flash(
+            "Conta criada com sucesso!",
+            "sucesso"
+        )
+
+        return redirect(
+            url_for("login")
+        )
+
+    return render_template(
+        "cadastro.html"
+    )
+
+
+# ==================================================
+# LOGOUT
+# ==================================================
+
+@app.route("/logout")
+def logout():
+
+    session.clear()
+
+    return redirect(
+        url_for("login")
+    )
+
+
+# ==================================================
 # TABELA DE LOTES
 # ==================================================
 
 class Lote(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column(db.String(100), nullable=False)
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    nome = db.Column(
+        db.String(100),
+        nullable=False
+    )
 
     animais = db.relationship(
         "Animal",
@@ -34,7 +287,11 @@ class Lote(db.Model):
 # ==================================================
 
 class Animal(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
 
     brinco = db.Column(
         db.String(50),
@@ -73,6 +330,7 @@ class Animal(db.Model):
 # ==================================================
 
 class Custo(db.Model):
+
     id = db.Column(
         db.Integer,
         primary_key=True
@@ -109,6 +367,7 @@ class Custo(db.Model):
 # ==================================================
 
 with app.app_context():
+
     db.create_all()
 
 
@@ -117,6 +376,7 @@ with app.app_context():
 # ==================================================
 
 @app.route("/")
+@login_required
 def index():
 
     total_animais = Animal.query.count()
@@ -146,6 +406,7 @@ def index():
 # ==================================================
 
 @app.route("/animais")
+@login_required
 def animais():
 
     lista_animais = Animal.query.order_by(
@@ -166,6 +427,7 @@ def animais():
     "/animais/cadastrar",
     methods=["GET", "POST"]
 )
+@login_required
 def cadastrar_animal():
 
     if request.method == "POST":
@@ -195,6 +457,7 @@ def cadastrar_animal():
         )
 
         if not brinco or not raca:
+
             return (
                 "Erro: brinco e raça são obrigatórios."
             )
@@ -204,13 +467,17 @@ def cadastrar_animal():
         ).first()
 
         if animal_existente:
+
             return (
                 "Erro: já existe um animal com esse brinco."
             )
 
         if lote_id:
+
             lote_id = int(lote_id)
+
         else:
+
             lote_id = None
 
         novo_animal = Animal(
@@ -221,7 +488,10 @@ def cadastrar_animal():
             lote_id=lote_id
         )
 
-        db.session.add(novo_animal)
+        db.session.add(
+            novo_animal
+        )
+
         db.session.commit()
 
         return redirect(
@@ -242,7 +512,10 @@ def cadastrar_animal():
 # EXCLUIR ANIMAL
 # ==================================================
 
-@app.route("/animais/excluir/<int:id>")
+@app.route(
+    "/animais/excluir/<int:id>"
+)
+@login_required
 def excluir_animal(id):
 
     animal = db.session.get(
@@ -251,9 +524,13 @@ def excluir_animal(id):
     )
 
     if animal is None:
+
         return "Animal não encontrado."
 
-    db.session.delete(animal)
+    db.session.delete(
+        animal
+    )
+
     db.session.commit()
 
     return redirect(
@@ -269,11 +546,14 @@ def excluir_animal(id):
     "/custos",
     methods=["GET", "POST"]
 )
+@login_required
 def custos():
 
     if request.method == "POST":
 
-        tipo = request.form.get("tipo")
+        tipo = request.form.get(
+            "tipo"
+        )
 
         alvo = request.form.get(
             "alvo",
@@ -294,16 +574,21 @@ def custos():
             "Despesa",
             "Receita"
         ]:
+
             return "Erro: tipo inválido."
 
         if not alvo or not descricao or not valor:
+
             return "Erro: preencha todos os campos."
 
         try:
+
             valor = float(
                 valor.replace(",", ".")
             )
+
         except ValueError:
+
             return "Erro: valor inválido."
 
         novo_custo = Custo(
@@ -313,7 +598,10 @@ def custos():
             valor=valor
         )
 
-        db.session.add(novo_custo)
+        db.session.add(
+            novo_custo
+        )
+
         db.session.commit()
 
         return redirect(
@@ -335,6 +623,7 @@ def custos():
 # ==================================================
 
 @app.route("/relatorios")
+@login_required
 def relatorios():
 
     total_despesas = db.session.query(
@@ -364,10 +653,13 @@ def relatorios():
     total_animais = Animal.query.count()
 
     if total_animais > 0:
+
         media_por_animal = (
             total_despesas / total_animais
         )
+
     else:
+
         media_por_animal = 0
 
     return render_template(
@@ -387,6 +679,7 @@ def relatorios():
 # ==================================================
 
 if __name__ == "__main__":
+
     app.run(
         host="127.0.0.1",
         port=5000,
