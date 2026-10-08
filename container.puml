@@ -1,0 +1,20 @@
+@startuml
+!include https://github.com/Vanzella2929/Agrogestor/issues/5#issue-5081558393
+title Diagrama de Containers - Sistema de Custo de Produção de Vaca Parida e Cria
+
+Person(produtor, "Produtor Rural", "Utiliza o sistema para controlar o rebanho e os custos.")
+
+System_Boundary(s1, "Sistema Agro") {
+
+    Container(web, "Aplicação Web", "Python + Flask", "Interface para gerenciamento do sistema.")
+
+    Container(api, "API", "Python", "Processa as regras de negócio e operações CRUD.")
+
+    ContainerDb(db, "Banco de Dados", "SQLite", "Armazena animais, custos e relatórios.")
+}
+
+Rel(produtor, web, "Utiliza")
+Rel(web, api, "Requisições HTTP")
+Rel(api, db, "Lê e grava dados")
+
+@enduml
