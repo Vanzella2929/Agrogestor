@@ -6,316 +6,78 @@ Relatórios | Agrogestor
 
 {% block conteudo %}
 
-{# ==========================================================
-   PROTEÇÃO CONTRA VARIÁVEIS NÃO DEFINIDAS
-   ========================================================== #}
-
-{% set saldo_valor = saldo|default(0, true) %}
-{% set receitas_valor = total_receitas|default(0, true) %}
-{% set despesas_valor = total_despesas|default(0, true) %}
-{% set animais_total = total_animais|default(0, true) %}
-{% set custo_medio = media_por_animal|default(0, true) %}
-
-{% set paridas = vacas_paridas|default(0, true) %}
-{% set gestantes = vacas_gestantes|default(0, true) %}
-{% set vazias = vacas_vazias|default(0, true) %}
-
-{# Percentuais calculados com segurança #}
-
-{% if animais_total > 0 %}
-
-    {% set percentual_paridas = (paridas * 100 / animais_total)|round(0) %}
-    {% set percentual_gestantes = (gestantes * 100 / animais_total)|round(0) %}
-    {% set percentual_vazias = (vazias * 100 / animais_total)|round(0) %}
-
-{% else %}
-
-    {% set percentual_paridas = 0 %}
-    {% set percentual_gestantes = 0 %}
-    {% set percentual_vazias = 0 %}
-
-{% endif %}
-
-
-<!-- ==========================================================
-     CABEÇALHO
-     ========================================================== -->
-
 <div class="boas-vindas">
+    <span class="pequeno-titulo">VISÃO GERAL DA PROPRIEDADE</span>
 
-    <span class="pequeno-titulo">
-        CONTROLE DA PROPRIEDADE
-    </span>
-
-    <h2>
-        📊 Relatório Geral
-    </h2>
+    <h2>📊 Relatório da Propriedade</h2>
 
     <p>
-        Confira as receitas, despesas e a situação do seu rebanho.
+        Acompanhe os resultados financeiros e a situação do seu rebanho.
     </p>
-
 </div>
 
+<!-- RESUMO FINANCEIRO -->
+<section class="relatorio-section">
 
-<!-- ==========================================================
-     RESULTADO DA PROPRIEDADE
-     ========================================================== -->
-
-<section class="relatorio-destaque">
-
-    <div>
-
-        <span class="pequeno-titulo">
-            RESULTADO DA PROPRIEDADE
-        </span>
-
-        <h2>
-            R$ {{ "%.2f"|format(saldo_valor)|replace(".", ",") }}
-        </h2>
-
-
-        {% if saldo_valor > 0 %}
-
-            <p>
-                ✅ Resultado positivo: as receitas são maiores que as despesas.
-            </p>
-
-        {% elif saldo_valor < 0 %}
-
-            <p>
-                ⚠️ Atenção: as despesas são maiores que as receitas.
-            </p>
-
-        {% else %}
-
-            <p>
-                ℹ️ As receitas e despesas estão equilibradas.
-            </p>
-
-        {% endif %}
-
-    </div>
-
-</section>
-
-
-<!-- ==========================================================
-     RESUMO FINANCEIRO
-     ========================================================== -->
-
-<div class="relatorio-grid">
-
-
-    <!-- RECEITAS -->
-
-    <div class="relatorio-card">
-
-        <div class="icone-relatorio">
-            💰
-        </div>
-
+    <div class="titulo-card">
         <div>
-
-            <span>
-                Receitas
-            </span>
-
-            <strong>
-                R$ {{ "%.2f"|format(receitas_valor)|replace(".", ",") }}
-            </strong>
-
-            <small>
-                Dinheiro que entrou
-            </small>
-
+            <span class="pequeno-titulo">FINANCEIRO</span>
+            <h2>💰 Resultado financeiro</h2>
         </div>
-
     </div>
 
+    <div class="relatorio-cards">
 
-    <!-- DESPESAS -->
-
-    <div class="relatorio-card">
-
-        <div class="icone-relatorio">
-            💸
-        </div>
-
-        <div>
-
-            <span>
-                Despesas
-            </span>
-
-            <strong>
-                R$ {{ "%.2f"|format(despesas_valor)|replace(".", ",") }}
-            </strong>
-
-            <small>
-                Dinheiro que saiu
-            </small>
-
-        </div>
-
-    </div>
-
-
-    <!-- REBANHO -->
-
-    <div class="relatorio-card">
-
-        <div class="icone-relatorio">
-            🐄
-        </div>
-
-        <div>
-
-            <span>
-                Rebanho
-            </span>
-
-            <strong>
-                {{ animais_total }}
-            </strong>
-
-            <small>
-                Animais cadastrados
-            </small>
-
-        </div>
-
-    </div>
-
-
-    <!-- CUSTO MÉDIO -->
-
-    <div class="relatorio-card">
-
-        <div class="icone-relatorio">
-            🧮
-        </div>
-
-        <div>
-
-            <span>
-                Custo médio
-            </span>
-
-            <strong>
-                R$ {{ "%.2f"|format(custo_medio)|replace(".", ",") }}
-            </strong>
-
-            <small>
-                Por animal
-            </small>
-
-        </div>
-
-    </div>
-
-
-</div>
-
-
-<!-- ==========================================================
-     SITUAÇÃO DO REBANHO
-     ========================================================== -->
-
-<section class="card">
-
-    <span class="pequeno-titulo">
-        REBANHO
-    </span>
-
-    <h2>
-        🐄 Situação das vacas
-    </h2>
-
-    <p>
-        Veja a quantidade de vacas em cada situação.
-    </p>
-
-
-    <!-- VACAS PARIDAS -->
-
-    <div class="barra-item">
-
-        <div class="barra-texto">
-
-            <span>
-                🐄 Vacas paridas
-            </span>
-
-            <strong>
-                {{ paridas }}
-            </strong>
-
-        </div>
-
-        <div class="barra-fundo">
-
-            <div
-                class="barra"
-                style="width: {{ percentual_paridas }}%;">
+        <div class="relatorio-card">
+            <div class="relatorio-icone entrada">
+                💵
             </div>
 
+            <div>
+                <span>Receitas</span>
+                <strong>
+                    R$ {{ "%.2f"|format(total_receitas) }}
+                </strong>
+            </div>
         </div>
 
-    </div>
-
-
-    <!-- VACAS GESTANTES -->
-
-    <div class="barra-item">
-
-        <div class="barra-texto">
-
-            <span>
-                🤰 Vacas gestantes
-            </span>
-
-            <strong>
-                {{ gestantes }}
-            </strong>
-
-        </div>
-
-        <div class="barra-fundo">
-
-            <div
-                class="barra"
-                style="width: {{ percentual_gestantes }}%;">
+        <div class="relatorio-card">
+            <div class="relatorio-icone despesa">
+                💸
             </div>
 
+            <div>
+                <span>Despesas</span>
+                <strong>
+                    R$ {{ "%.2f"|format(total_despesas) }}
+                </strong>
+            </div>
         </div>
 
-    </div>
-
-
-    <!-- VACAS VAZIAS -->
-
-    <div class="barra-item">
-
-        <div class="barra-texto">
-
-            <span>
-                ⚪ Vacas vazias
-            </span>
-
-            <strong>
-                {{ vazias }}
-            </strong>
-
-        </div>
-
-        <div class="barra-fundo">
-
-            <div
-                class="barra"
-                style="width:" {{percentual_vazias }}%;>
+        <div class="relatorio-card destaque">
+            <div class="relatorio-icone resultado">
+                📈
             </div>
 
+            <div>
+                <span>Resultado</span>
+                <strong>
+                    R$ {{ "%.2f"|format(saldo) }}
+                </strong>
+            </div>
+        </div>
+
+        <div class="relatorio-card">
+            <div class="relatorio-icone animais">
+                🐄
+            </div>
+
+            <div>
+                <span>Animais</span>
+                <strong>
+                    {{ total_animais }}
+                </strong>
+            </div>
         </div>
 
     </div>
@@ -323,118 +85,193 @@ Relatórios | Agrogestor
 </section>
 
 
-<!-- ==========================================================
-     MOVIMENTAÇÕES
-     ========================================================== -->
+<!-- REBANHO -->
+<section class="relatorio-section">
 
-<section class="card tabela-card">
+    <div class="titulo-card">
+        <div>
+            <span class="pequeno-titulo">REBANHO</span>
+            <h2>🐄 Situação das matrizes</h2>
+        </div>
 
-    <span class="pequeno-titulo">
-        CONTROLE FINANCEIRO
-    </span>
+        <a href="{{ url_for('animais') }}" class="btn">
+            Ver rebanho →
+        </a>
+    </div>
 
-    <h2>
-        💰 Entradas e saídas
-    </h2>
+    <div class="situacao-grid">
 
-    <p>
-        Confira tudo que foi registrado no sistema.
-    </p>
+        <div class="situacao-card parida">
+
+            <div>
+                <small>Paridas</small>
+                <strong>{{ vacas_paridas }}</strong>
+            </div>
+
+            <b>
+                {{ "%.1f"|format(percentual_paridas) }}%
+            </b>
+        </div>
 
 
-    {% if movimentacoes|default([], true) %}
+        <div class="situacao-card gestante">
 
-    <div class="tabela-responsiva">
+            <div>
+                <small>Gestantes</small>
+                <strong>{{ vacas_gestantes }}</strong>
+            </div>
+
+            <b>
+                {{ "%.1f"|format(percentual_gestantes) }}%
+            </b>
+        </div>
+
+
+        <div class="situacao-card vazia">
+
+            <div>
+                <small>Vazias</small>
+                <strong>{{ vacas_vazias }}</strong>
+            </div>
+
+            <b>
+                {{ "%.1f"|format(percentual_vazias) }}%
+            </b>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CUSTO MÉDIO -->
+<section class="relatorio-section">
+
+    <div class="indicador">
+
+        <div class="indicador-icone">
+            📊
+        </div>
+
+        <div class="indicador-conteudo">
+
+            <span class="pequeno-titulo">
+                INDICADOR DA PROPRIEDADE
+            </span>
+
+            <h2>Custo médio por animal</h2>
+
+            <p>
+                Valor médio das despesas registradas
+                para cada animal cadastrado.
+            </p>
+
+        </div>
+
+        <strong class="valor-indicador">
+            R$ {{ "%.2f"|format(media_por_animal) }}
+        </strong>
+
+    </div>
+
+</section>
+
+
+<!-- MOVIMENTAÇÕES -->
+<section class="relatorio-section">
+
+    <div class="titulo-card">
+
+        <div>
+            <span class="pequeno-titulo">HISTÓRICO</span>
+            <h2>📋 Últimas movimentações</h2>
+        </div>
+
+        <a href="{{ url_for('custos') }}" class="btn">
+            + Nova movimentação
+        </a>
+
+    </div>
+
+
+    <div class="tabela-relatorio">
 
         <table>
 
             <thead>
 
                 <tr>
-
-                    <th>
-                        Data
-                    </th>
-
-                    <th>
-                        Tipo
-                    </th>
-
-                    <th>
-                        Descrição
-                    </th>
-
-                    <th>
-                        Referência
-                    </th>
-
-                    <th>
-                        Valor
-                    </th>
-
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Alvo</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
                 </tr>
 
             </thead>
 
-
             <tbody>
 
-                {% for item in movimentacoes %}
+                {% for movimentacao in movimentacoes %}
 
                 <tr>
 
                     <td>
-                        {{ item.data.strftime("%d/%m/%Y") }}
+                        {{ movimentacao.data.strftime('%d/%m/%Y') }}
                     </td>
-
 
                     <td>
 
-                        {% if item.tipo == "Receita" %}
+                        {% if movimentacao.tipo == "Receita" %}
 
-                            <span class="badge receita-badge">
-                                ↑ Receita
-                            </span>
+                        <span class="tag tag-receita">
+                            Receita
+                        </span>
 
                         {% else %}
 
-                            <span class="badge despesa-badge">
-                                ↓ Despesa
-                            </span>
+                        <span class="tag tag-despesa">
+                            Despesa
+                        </span>
 
                         {% endif %}
 
                     </td>
 
-
                     <td>
-                        {{ item.descricao }}
+                        {{ movimentacao.alvo }}
                     </td>
 
-
                     <td>
-                        {{ item.alvo }}
+                        {{ movimentacao.descricao }}
                     </td>
 
+                    <td class="valor-tabela">
 
-                    <td>
-
-                        {% if item.tipo == "Receita" %}
+                        {% if movimentacao.tipo == "Receita" %}
 
                             <span class="valor-receita">
-                                + R$
-                                {{ "%.2f"|format(item.valor)|replace(".", ",") }}
+                                + R$ {{ "%.2f"|format(movimentacao.valor) }}
                             </span>
 
                         {% else %}
 
                             <span class="valor-despesa">
-                                - R$
-                                {{ "%.2f"|format(item.valor)|replace(".", ",") }}
+                                - R$ {{ "%.2f"|format(movimentacao.valor) }}
                             </span>
 
                         {% endif %}
 
+                    </td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="5" class="sem-dados">
+                        Nenhuma movimentação registrada.
                     </td>
 
                 </tr>
@@ -447,114 +284,31 @@ Relatórios | Agrogestor
 
     </div>
 
-    {% else %}
-
-    <div class="vazio">
-
-        <div>
-            📊
-        </div>
-
-        <h3>
-            Nenhuma movimentação registrada
-        </h3>
-
-        <p>
-            Cadastre uma receita ou despesa para ela aparecer aqui.
-        </p>
-
-        <a
-            href="{{ url_for('custos') }}"
-            class="btn">
-
-            + Registrar movimentação
-
-        </a>
-
-    </div>
-
-    {% endif %}
-
 </section>
 
 
-<!-- ==========================================================
-     RESUMO FINAL
-     ========================================================== -->
+<!-- DICA -->
+<section class="card aviso-atencao">
 
-<section class="card">
+    <div class="aviso-atencao-icone">
+        💡
+    </div>
 
-    <span class="pequeno-titulo">
-        RESUMO
-    </span>
+    <div>
 
-    <h2>
-        📋 Resumo da propriedade
-    </h2>
+        <span class="pequeno-titulo">
+            DICA DO AGROGESTOR
+        </span>
 
+        <h2>
+            Mantenha seus registros atualizados
+        </h2>
 
-    <div class="resumo-informacoes">
-
-
-        <!-- ENTRADAS -->
-
-        <div>
-
-            <span>
-                💰 Entradas
-            </span>
-
-            <strong>
-                R$ {{ "%.2f"|format(receitas_valor)|replace(".", ",") }}
-            </strong>
-
-        </div>
-
-
-        <!-- SAÍDAS -->
-
-        <div>
-
-            <span>
-                💸 Saídas
-            </span>
-
-            <strong>
-                R$ {{ "%.2f"|format(despesas_valor)|replace(".", ",") }}
-            </strong>
-
-        </div>
-
-
-        <!-- RESULTADO -->
-
-        <div>
-
-            <span>
-                📈 Resultado
-            </span>
-
-            <strong>
-                R$ {{ "%.2f"|format(saldo_valor)|replace(".", ",") }}
-            </strong>
-
-        </div>
-
-
-        <!-- ANIMAIS -->
-
-        <div>
-
-            <span>
-                🐄 Animais
-            </span>
-
-            <strong>
-                {{ animais_total }}
-            </strong>
-
-        </div>
-
+        <p>
+            Registre compras, vendas e despesas da propriedade
+            para acompanhar melhor o resultado financeiro
+            e tomar decisões mais organizadas.
+        </p>
 
     </div>
 

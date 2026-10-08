@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Agenda | Agrogestor
+{% endblock %}
+
+{% block conteudo %}
+
+<div class="boas-vindas">
+    <span class="pequeno-titulo">
+        ORGANIZAÇÃO DA PROPRIEDADE
+    </span>
+
+    <h2>
+        📅 Agenda da propriedade
+    </h2>
+
+    <p>
+        Cadastre e acompanhe as atividades e lembretes importantes da sua propriedade.
+    </p>
+</div>
+
+
+<section class="card">
+
+    <div class="titulo-card">
+
+        <div>
+            <span class="pequeno-titulo">
+                NOVO AVISO
+            </span>
+
+            <h2>
+                ➕ Criar lembrete
+            </h2>
+        </div>
+
+    </div>
+
+
+    <form method="POST">
+
+        <label for="titulo">
+            Título
+        </label>
+
+        <input
+            type="text"
+            id="titulo"
+            name="titulo"
+            placeholder="Ex.: Vacinação do rebanho"
+            required
+        >
+
+
+        <label for="descricao">
+            Descrição
+        </label>
+
+        <input
+            type="text"
+            id="descricao"
+            name="descricao"
+            placeholder="Digite os detalhes da atividade"
+            required
+        >
+
+
+        <label for="data">
+            Data
+        </label>
+
+        <input
+            type="date"
+            id="data"
+            name="data"
+            required
+        >
+
+
+        <label for="tipo">
+            Tipo
+        </label>
+
+        <select
+            id="tipo"
+            name="tipo"
+        >
+            <option value="Aviso">
+                Aviso
+            </option>
+
+            <option value="Vacinação">
+                Vacinação
+            </option>
+
+            <option value="Manejo">
+                Manejo
+            </option>
+
+            <option value="Veterinário">
+                Veterinário
+            </option>
+
+            <option value="Financeiro">
+                Financeiro
+            </option>
+
+            <option value="Outro">
+                Outro
+            </option>
+        </select>
+
+
+        <button type="submit" class="btn">
+            📅 Salvar lembrete
+        </button>
+
+    </form>
+
+</section>
+
+
+
+<section class="card">
+
+    <div class="titulo-card">
+
+        <div>
+            <span class="pequeno-titulo">
+                ATIVIDADES
+            </span>
+
+            <h2>
+                🔔 Próximos avisos
+            </h2>
+        </div>
+
+    </div>
+
+
+    {% if avisos %}
+
+        <div class="agenda-lista">
+
+            {% for aviso in avisos %}
+
+                <div class="agenda-item">
+
+                    <div class="agenda-data">
+
+                        <strong>
+                            {{ aviso.data.strftime('%d') }}
+                        </strong>
+
+                        <span>
+                            {{ aviso.data.strftime('%m/%Y') }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="agenda-conteudo">
+
+                        <span class="tag tag-info">
+                            {{ aviso.tipo }}
+                        </span>
+
+                        <h3>
+                            {{ aviso.titulo }}
+                        </h3>
+
+                        <p>
+                            {{ aviso.descricao }}
+                        </p>
+
+                    </div>
+
+
+                    <div class="agenda-acao">
+
+                        <a
+                            href="{{ url_for('excluir_agenda', id=aviso.id) }}"
+                            class="btn-excluir"
+                            onclick="return confirm('Deseja realmente excluir este aviso?')"
+                        >
+                            🗑️ Excluir
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="vazio">
+
+            <div class="vazio-icone">
+                📅
+            </div>
+
+            <h3>
+                Nenhum aviso cadastrado
+            </h3>
+
+            <p>
+                Use o formulário acima para adicionar a primeira atividade da propriedade.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

@@ -1,46 +1,267 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block titulo %}
+Financeiro | Agrogestor
+{% endblock %}
 
 {% block conteudo %}
-<section class="card">
-  <h2>Lançamento Financeiro</h2>
-  <form action="{{ url_for('custos') }}" method="POST">
-    <select name="tipo" required>
-      <option value="" disabled selected>Selecione o Tipo</option>
-      <option value="Despesa">Despesa </option>
-      <option value="Receita">Lucro</option>
-    </select>
-    <input type="text" name="alvo" placeholder="Brinco ou Lote" required>
-    <input type="text" name="descricao" placeholder="Descrição (ex: Ração, Vacina, Venda)" required>
-    <input type="number" name="valor" placeholder="Valor (R$)" step="0.01" required>
-    <button type="submit">Registrar Lançamento</button>
-  </form>
-</section>
+
+<div class="boas-vindas">
+
+<span class="pequeno-titulo">
+    CONTROLE FINANCEIRO
+</span>
+
+<h2>
+     Lançamentos financeiros
+</h2>
+
+<p>
+    Registre as receitas e despesas da sua propriedade.
+</p>
+
+</div>
+
+<!-- ==========================================================
+     NOVO LANÇAMENTO
+     ========================================================== -->
 
 <section class="card">
-  <h2>Histórico de Movimentações</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Tipo</th>
-        <th>Alvo</th>
-        <th>Descrição</th>
-        <th>Valor</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for custo in custos %}
-      <tr>
-        <td>{{ custo.tipo }}</td>
-        <td>{{ custo.alvo }}</td>
-        <td>{{ custo.descricao }}</td>
-        <td>R$ {{ "%.2f"|format(custo.valor) }}</td>
-      </tr>
-      {% else %}
-      <tr>
-        <td colspan="4">Nenhuma movimentação registrada.</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+
+<span class="pequeno-titulo">
+    NOVO LANÇAMENTO
+</span>
+
+<h2>
+    Registrar movimentação
+</h2>
+
+<p>
+    Informe os dados da movimentação financeira.
+</p>
+
+
+<form
+    action="{{ url_for('custos') }}"
+    method="POST"
+>
+
+    <label for="tipo">
+        Tipo de movimentação
+    </label>
+
+    <select
+        id="tipo"
+        name="tipo"
+        required
+    >
+        <option value="" disabled selected>
+            Selecione o tipo
+        </option>
+
+        <option value="Despesa">
+            Despesa
+        </option>
+
+        <option value="Receita">
+            Receita
+        </option>
+    </select>
+
+
+    <label for="alvo">
+        Referência
+    </label>
+
+    <input
+        type="text"
+        id="alvo"
+        name="alvo"
+        placeholder="Ex.: Brinco, lote ou propriedade"
+        required
+    >
+
+
+    <label for="descricao">
+        Descrição
+    </label>
+
+    <input
+        type="text"
+        id="descricao"
+        name="descricao"
+        placeholder="Ex.: Ração, vacina, venda de animal"
+        required
+    >
+
+
+    <label for="valor">
+        Valor
+    </label>
+
+    <input
+        type="number"
+        id="valor"
+        name="valor"
+        placeholder="Valor em R$"
+        step="0.01"
+        min="0.01"
+        required
+    >
+
+
+    <button type="submit">
+        Registrar lançamento
+    </button>
+
+</form>
+
 </section>
+
+<!-- ==========================================================
+     HISTÓRICO
+     ========================================================== -->
+
+<section class="card tabela-card">
+
+<span class="pequeno-titulo">
+    HISTÓRICO
+</span>
+
+<h2>
+     Movimentações registradas
+</h2>
+
+<p>
+    Confira todas as receitas e despesas cadastradas.
+</p>
+
+
+{% if custos %}
+
+<div class="tabela-responsiva">
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>
+                    Data
+                </th>
+
+                <th>
+                    Tipo
+                </th>
+
+                <th>
+                    Referência
+                </th>
+
+                <th>
+                    Descrição
+                </th>
+
+                <th>
+                    Valor
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for custo in custos %}
+
+            <tr>
+
+                <td>
+                    {{ custo.data.strftime("%d/%m/%Y") }}
+                </td>
+
+
+                <td>
+
+                    {% if custo.tipo == "Receita" %}
+
+                        <span class="badge receita-badge">
+                            ↑ Receita
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge despesa-badge">
+                            ↓ Despesa
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+
+                <td>
+                    {{ custo.alvo }}
+                </td>
+
+
+                <td>
+                    {{ custo.descricao }}
+                </td>
+
+
+                <td>
+
+                    {% if custo.tipo == "Receita" %}
+
+                        <span class="valor-receita">
+                            + R$
+                            {{ "%.2f"|format(custo.valor)|replace(".", ",") }}
+                        </span>
+
+                    {% else %}
+
+                        <span class="valor-despesa">
+                            - R$
+                            {{ "%.2f"|format(custo.valor)|replace(".", ",") }}
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% else %}
+
+<div class="vazio">
+
+    <div>
+        
+    </div>
+
+    <h3>
+        Nenhuma movimentação registrada
+    </h3>
+
+    <p>
+        Registre uma receita ou despesa para ela aparecer no histórico.
+    </p>
+
+</div>
+
+{% endif %}
+
+</section>
+
 {% endblock %}

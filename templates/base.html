@@ -1,160 +1,109 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <title>{% block titulo %}Agrogestor{% endblock %}</title>
 
-    <title>
-        {% block titulo %}
-            Agrogestor
-        {% endblock %}
-    </title>
+    <meta name="description" content="Agrogestor - Gestão inteligente da propriedade rural">
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
-    >
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-
 
 <body>
 
+    <!-- BARRA SUPERIOR -->
+    <header class="topbar">
 
-<!-- ==========================================================
-     CABEÇALHO
-     ========================================================== -->
+        <div class="topbar-container">
 
-<header class="topo">
+            <!-- LOGO -->
+            <a href="{{ url_for('index') }}" class="logo-area">
 
-    <div class="topo-conteudo">
+                <div class="logo-icon">
+                    <span>AG</span>
+                </div>
 
+                <div class="logo-text">
+                    <strong>Agrogestor</strong>
+                    <small>Gestão da propriedade rural</small>
+                </div>
 
-        <!-- LOGO -->
+            </a>
 
-        <a
-            href="{{ url_for('index') }}"
-            class="logo"
-        >
+            <!-- MENU -->
+            <nav class="menu">
 
-            <div class="logo-icone">
-                🌱
+                <a href="{{ url_for('index') }}"
+                   class="{% if request.endpoint == 'index' %}ativo{% endif %}">
+                    <span class="menu-icon">⌂</span>
+                    Painel
+                </a>
+
+                <a href="{{ url_for('animais') }}"
+                   class="{% if request.endpoint == 'animais' %}ativo{% endif %}">
+                    <span class="menu-icon">▰</span>
+                    Rebanho
+                </a>
+
+                <a href="{{ url_for('custos') }}"
+                   class="{% if request.endpoint == 'custos' %}ativo{% endif %}">
+                    <span class="menu-icon">$</span>
+                    Financeiro
+                </a>
+
+                <a href="{{ url_for('relatorios') }}"
+                   class="{% if request.endpoint == 'relatorios' %}ativo{% endif %}">
+                    <span class="menu-icon">▥</span>
+                    Relatórios
+                </a>
+
+                <a href="{{ url_for('agenda') }}"
+                   class="{% if request.endpoint == 'agenda' %}ativo{% endif %}">
+                    <span class="menu-icon">▣</span>
+                    Agenda
+                </a>
+
+            </nav>
+
+            <!-- PERFIL -->
+            <div class="perfil">
+
+                <div class="perfil-icon">
+                    ●
+                </div>
+
+                <span class="perfil-seta">⌄</span>
+
             </div>
 
-            <div class="logo-texto">
+        </div>
 
-                <strong>
-                    Agrogestor
-                </strong>
-
-                <small>
-                    Gestão da propriedade rural
-                </small>
-
-            </div>
-
-        </a>
+    </header>
 
 
-        <!-- MENU -->
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-content">
 
-        <nav class="menu">
+        {% block conteudo %}
+        {% endblock %}
 
-            <a
-                href="{{ url_for('index') }}"
-            >
-                🏠
-                <span>Painel</span>
-            </a>
+    </main>
 
 
-            <a
-                href="{{ url_for('animais') }}"
-            >
-                🐄
-                <span>Rebanho</span>
-            </a>
+    <!-- RODAPÉ -->
+    <footer class="footer">
 
+        <div>
+            Agrogestor
+        </div>
 
-            <a
-                href="{{ url_for('custos') }}"
-            >
-                💰
-                <span>Financeiro</span>
-            </a>
+        <span>
+            Gestão inteligente da propriedade rural
+        </span>
 
-
-            <a
-                href="{{ url_for('relatorios') }}"
-            >
-                📊
-                <span>Relatórios</span>
-            </a>
-
-
-            <a
-                href="{{ url_for('agenda') }}"
-            >
-                📅
-                <span>Agenda</span>
-            </a>
-
-        </nav>
-
-    </div>
-
-</header>
-
-
-<!-- ==========================================================
-     CONTEÚDO PRINCIPAL
-     ========================================================== -->
-
-<main class="container">
-
-    {% block conteudo %}
-
-    {% endblock %}
-
-</main>
-
-
-<!-- ==========================================================
-     RODAPÉ
-     ========================================================== -->
-
-<footer class="rodape">
-
-    <div>
-
-        <strong>
-            🌱 Agrogestor
-        </strong>
-
-        <p>
-            Gestão simples para o produtor rural.
-        </p>
-
-    </div>
-
-
-    <div>
-
-        <small>
-            Sistema de controle de rebanho e produção
-        </small>
-
-    </div>
-
-</footer>
-
+    </footer>
 
 </body>
-
 </html>

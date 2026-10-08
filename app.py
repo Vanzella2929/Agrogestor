@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-
 # ============================================================
 # CONFIGURAÇÃO DO FLASK
 # ============================================================
@@ -20,7 +19,6 @@ db = SQLAlchemy(app)
 # ============================================================
 
 class Lote(db.Model):
-
     id = db.Column(
         db.Integer,
         primary_key=True
@@ -43,7 +41,6 @@ class Lote(db.Model):
 # ============================================================
 
 class Animal(db.Model):
-
     id = db.Column(
         db.Integer,
         primary_key=True
@@ -86,7 +83,6 @@ class Animal(db.Model):
 # ============================================================
 
 class Custo(db.Model):
-
     id = db.Column(
         db.Integer,
         primary_key=True
@@ -119,11 +115,79 @@ class Custo(db.Model):
 
 
 # ============================================================
+# TABELA DE AVISOS / AGENDA
+# ============================================================
+
+class Agenda(db.Model):
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    titulo = db.Column(
+        db.String(150),
+        nullable=False
+    )
+
+    descricao = db.Column(
+        db.String(255),
+        nullable=False
+    )
+
+    data = db.Column(
+        db.Date,
+        nullable=False
+    )
+
+    tipo = db.Column(
+        db.String(50),
+        nullable=False,
+        default="Aviso"
+    )
+
+
+# ============================================================
 # CRIAR BANCO DE DADOS
 # ============================================================
 
 with app.app_context():
     db.create_all()
+
+
+# ============================================================
+# FUNÇÃO PARA CALCULAR DADOS DO PAINEL
+# ============================================================
+
+def dados_dashboard():
+    total_animais = Animal.query.count()
+
+    total_despesas = (
+        db.session.query(
+            db.func.sum(Custo.valor)
+        )
+        .filter(Custo.tipo == "Despesa")
+        .scalar()
+        or 0
+    )
+
+    total_receitas = (
+        db.session.query(
+            db.func.sum(Custo.valor)
+        )
+        .filter(Custo.tipo == "Receita")
+        .scalar()
+        or 0
+    )
+
+    saldo = total_receitas - total_despesas
+
+    return {
+        "total_animais": total_animais,
+        "total_custos": total_despesas,
+        "total_despesas": total_despesas,
+        "total_receitas": total_receitas,
+        "saldo": saldo
+    }
 
 
 # ============================================================
@@ -133,28 +197,39 @@ with app.app_context():
 @app.route("/")
 def index():
 
-    total_animais = Animal.query.count()
-
-    total_custos = db.session.query(
-        db.func.sum(Custo.valor)
-    ).filter(
-        Custo.tipo == "Despesa"
-    ).scalar() or 0
-
-    total_receitas = db.session.query(
-        db.func.sum(Custo.valor)
-    ).filter(
-        Custo.tipo == "Receita"
-    ).scalar() or 0
-
-    saldo = total_receitas - total_custos
+    dados = dados_dashboard()
 
     return render_template(
         "index.html",
-        total_animais=total_animais,
-        total_custos=total_custos,
-        total_receitas=total_receitas,
-        saldo=saldo
+        total_animais=dados["total_animais"],
+        total_custos=dados["total_custos"],
+        total_despesas=dados["total_despesas"],
+        total_receitas=dados["total_receitas"],
+        saldo=dados["saldo"]
+    )
+
+
+# ============================================================
+# DASHBOARD
+# ============================================================
+# Esta rota resolve o erro:
+# BuildError: endpoint 'dashboard' não encontrado.
+#
+# O dashboard usa o mesmo painel do index.html.
+# Assim, tanto "/" quanto "/dashboard" funcionam.
+
+@app.route("/dashboard")
+def dashboard():
+
+    dados = dados_dashboard()
+
+    return render_template(
+        "index.html",
+        total_animais=dados["total_animais"],
+        total_custos=dados["total_custos"],
+        total_despesas=dados["total_despesas"],
+        total_receitas=dados["total_receitas"],
+        saldo=dados["saldo"]
     )
 
 
@@ -165,9 +240,11 @@ def index():
 @app.route("/animais")
 def animais():
 
-    lista_animais = Animal.query.order_by(
-        Animal.id.desc()
-    ).all()
+    lista_animais = (
+        Animal.query
+        .order_by(Animal.id.desc())
+        .all()
+    )
 
     return render_template(
         "animais.html",
@@ -212,18 +289,14 @@ def cadastrar_animal():
         )
 
         if not brinco or not raca:
-
             return "Erro: brinco e raça são obrigatórios."
-
 
         animal_existente = Animal.query.filter_by(
             brinco=brinco
         ).first()
 
         if animal_existente:
-
             return "Erro: já existe um animal com esse brinco."
-
 
         if lote_id:
 
@@ -231,13 +304,10 @@ def cadastrar_animal():
                 lote_id = int(lote_id)
 
             except ValueError:
-
                 return "Erro: lote inválido."
 
         else:
-
             lote_id = None
-
 
         novo_animal = Animal(
             brinco=brinco,
@@ -254,10 +324,11 @@ def cadastrar_animal():
             url_for("animais")
         )
 
-
-    lotes = Lote.query.order_by(
-        Lote.nome.asc()
-    ).all()
+    lotes = (
+        Lote.query
+        .order_by(Lote.nome.asc())
+        .all()
+    )
 
     return render_template(
         "cadastrar_animal.html",
@@ -278,9 +349,7 @@ def excluir_animal(id):
     )
 
     if animal is None:
-
         return "Animal não encontrado."
-
 
     db.session.delete(animal)
     db.session.commit()
@@ -319,19 +388,14 @@ def custos():
             ""
         ).strip()
 
-
         if tipo not in [
             "Despesa",
             "Receita"
         ]:
-
             return "Erro: tipo de movimentação inválido."
 
-
         if not alvo or not descricao or not valor:
-
             return "Erro: preencha todos os campos."
-
 
         try:
 
@@ -346,14 +410,10 @@ def custos():
             valor = float(valor)
 
         except ValueError:
-
             return "Erro: valor inválido."
 
-
         if valor <= 0:
-
             return "Erro: o valor deve ser maior que zero."
-
 
         nova_movimentacao = Custo(
             tipo=tipo,
@@ -362,24 +422,116 @@ def custos():
             valor=valor
         )
 
-        db.session.add(
-            nova_movimentacao
-        )
-
+        db.session.add(nova_movimentacao)
         db.session.commit()
 
         return redirect(
             url_for("custos")
         )
 
-
-    lista_custos = Custo.query.order_by(
-        Custo.data.desc()
-    ).all()
+    lista_custos = (
+        Custo.query
+        .order_by(Custo.data.desc())
+        .all()
+    )
 
     return render_template(
         "custos.html",
         custos=lista_custos
+    )
+
+
+# ============================================================
+# AGENDA
+# ============================================================
+
+@app.route(
+    "/agenda",
+    methods=["GET", "POST"]
+)
+def agenda():
+
+    if request.method == "POST":
+
+        titulo = request.form.get(
+            "titulo",
+            ""
+        ).strip()
+
+        descricao = request.form.get(
+            "descricao",
+            ""
+        ).strip()
+
+        data_texto = request.form.get(
+            "data",
+            ""
+        ).strip()
+
+        tipo = request.form.get(
+            "tipo",
+            "Aviso"
+        ).strip()
+
+        if not titulo or not descricao or not data_texto:
+            return "Erro: preencha todos os campos."
+
+        try:
+
+            data = datetime.strptime(
+                data_texto,
+                "%Y-%m-%d"
+            ).date()
+
+        except ValueError:
+            return "Erro: data inválida."
+
+        novo_aviso = Agenda(
+            titulo=titulo,
+            descricao=descricao,
+            data=data,
+            tipo=tipo
+        )
+
+        db.session.add(novo_aviso)
+        db.session.commit()
+
+        return redirect(
+            url_for("agenda")
+        )
+
+    avisos = (
+        Agenda.query
+        .order_by(Agenda.data.asc())
+        .all()
+    )
+
+    return render_template(
+        "agenda.html",
+        avisos=avisos
+    )
+
+
+# ============================================================
+# EXCLUIR AVISO DA AGENDA
+# ============================================================
+
+@app.route("/agenda/excluir/<int:id>")
+def excluir_agenda(id):
+
+    aviso = db.session.get(
+        Agenda,
+        id
+    )
+
+    if aviso is None:
+        return "Aviso não encontrado."
+
+    db.session.delete(aviso)
+    db.session.commit()
+
+    return redirect(
+        url_for("agenda")
     )
 
 
@@ -394,22 +546,25 @@ def relatorios():
     # FINANCEIRO
     # --------------------------------------------------------
 
-    total_despesas = db.session.query(
-        db.func.sum(Custo.valor)
-    ).filter(
-        Custo.tipo == "Despesa"
-    ).scalar() or 0
+    total_despesas = (
+        db.session.query(
+            db.func.sum(Custo.valor)
+        )
+        .filter(Custo.tipo == "Despesa")
+        .scalar()
+        or 0
+    )
 
-
-    total_receitas = db.session.query(
-        db.func.sum(Custo.valor)
-    ).filter(
-        Custo.tipo == "Receita"
-    ).scalar() or 0
-
+    total_receitas = (
+        db.session.query(
+            db.func.sum(Custo.valor)
+        )
+        .filter(Custo.tipo == "Receita")
+        .scalar()
+        or 0
+    )
 
     saldo = total_receitas - total_despesas
-
 
     # --------------------------------------------------------
     # REBANHO
@@ -417,24 +572,20 @@ def relatorios():
 
     total_animais = Animal.query.count()
 
-
     vacas_paridas = Animal.query.filter_by(
         situacao="Parida"
     ).count()
-
 
     vacas_gestantes = Animal.query.filter_by(
         situacao="Gestante"
     ).count()
 
-
     vacas_vazias = Animal.query.filter_by(
         situacao="Vazia"
     ).count()
 
-
     # --------------------------------------------------------
-    # PERCENTUAL DO REBANHO
+    # PERCENTUAIS
     # --------------------------------------------------------
 
     if total_animais > 0:
@@ -457,7 +608,6 @@ def relatorios():
         percentual_gestantes = 0
         percentual_vazias = 0
 
-
     # --------------------------------------------------------
     # CUSTO MÉDIO POR ANIMAL
     # --------------------------------------------------------
@@ -472,18 +622,18 @@ def relatorios():
 
         media_por_animal = 0
 
-
     # --------------------------------------------------------
     # MOVIMENTAÇÕES
     # --------------------------------------------------------
 
-    movimentacoes = Custo.query.order_by(
-        Custo.data.desc()
-    ).all()
-
+    movimentacoes = (
+        Custo.query
+        .order_by(Custo.data.desc())
+        .all()
+    )
 
     # --------------------------------------------------------
-    # ENVIAR DADOS PARA A PÁGINA
+    # ENVIAR DADOS PARA O RELATÓRIO
     # --------------------------------------------------------
 
     return render_template(

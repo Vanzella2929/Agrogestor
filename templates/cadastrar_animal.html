@@ -1,109 +1,145 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block titulo %}
+Cadastrar Animal | Agrogestor
+{% endblock %}
 
 {% block conteudo %}
 
 <div class="cabecalho-pagina">
-    <h2>Cadastrar Nova Vaca</h2>
 
-    <a href="{{ url_for('animais') }}" class="btn">
-        Voltar
-    </a>
+<div>
+    <span class="pequeno-titulo">
+        REBANHO
+    </span>
+
+    <h2>
+         Cadastrar nova vaca
+    </h2>
+
+    <p>
+        Adicione um novo animal ao rebanho da propriedade.
+    </p>
+</div>
+
+<a
+    href="{{ url_for('animais') }}"
+    class="btn"
+>
+    ← Voltar
+</a>
+
 </div>
 
 <section class="card">
 
-    <form action="{{ url_for('cadastrar_animal') }}" method="POST">
+<form
+    action="{{ url_for('cadastrar_animal') }}"
+    method="POST"
+>
 
-        <label for="brinco">
-            Brinco
-        </label>
+    <!-- BRINCO -->
 
-        <input
-            type="text"
-            id="brinco"
-            name="brinco"
-            placeholder="Digite o número do brinco"
-            required
-        >
+    <label for="brinco">
+        Brinco *
+    </label>
 
-
-        <label for="nome">
-            Nome
-        </label>
-
-        <input
-            type="text"
-            id="nome"
-            name="nome"
-            placeholder="Digite o nome do animal"
-        >
+    <input
+        type="text"
+        id="brinco"
+        name="brinco"
+        placeholder="Digite o número do brinco"
+        required
+    >
 
 
-        <label for="raca">
-            Raça
-        </label>
+    <!-- NOME -->
 
-        <input
-            type="text"
-            id="raca"
-            name="raca"
-            placeholder="Ex.: Nelore"
-            required
-        >
+    <label for="nome">
+        Nome do animal
+    </label>
 
-
-        <label for="situacao">
-            Situação
-        </label>
-
-        <select
-            id="situacao"
-            name="situacao"
-            required
-        >
-            <option value="Vazia">
-                Vazia
-            </option>
-
-            <option value="Gestante">
-                Gestante
-            </option>
-
-            <option value="Parida">
-                Parida
-            </option>
-        </select>
+    <input
+        type="text"
+        id="nome"
+        name="nome"
+        placeholder="Digite o nome do animal (opcional)"
+    >
 
 
-        <label for="lote_id">
-            Lote
-        </label>
+    <!-- RAÇA -->
 
-        <select
-            id="lote_id"
-            name="lote_id"
-        >
+    <label for="raca">
+        Raça *
+    </label>
 
-            <option value="">
-                Sem Lote
-            </option>
-
-            {% for lote in lotes %}
-
-            <option value="{{ lote.id }}">
-                {{ lote.nome }}
-            </option>
-
-            {% endfor %}
-
-        </select>
+    <input
+        type="text"
+        id="raca"
+        name="raca"
+        placeholder="Ex.: Nelore"
+        required
+    >
 
 
-        <button type="submit">
-            Cadastrar Animal
-        </button>
+    <!-- SITUAÇÃO -->
 
-    </form>
+    <label for="situacao">
+        Situação *
+    </label>
+
+    <select
+        id="situacao"
+        name="situacao"
+        required
+    >
+
+        <option value="Vazia" selected>
+            Vazia
+        </option><option value="Gestante">
+            Gestante
+        </option>
+
+        <option value="Parida">
+            Parida
+        </option>
+
+    </select>
+
+
+    <!-- LOTE -->
+
+    <label for="lote_id">
+        Lote
+    </label>
+
+    <select
+        id="lote_id"
+        name="lote_id"
+    >
+
+        <option value="">
+            Sem lote
+        </option>
+
+        {% for lote in lotes %}
+
+        <option value="{{ lote.id }}">
+            {{ lote.nome }}
+        </option>
+
+        {% endfor %}
+
+    </select>
+
+
+    <!-- BOTÃO -->
+
+    <button type="submit">
+        Cadastrar animal
+    </button>
+
+</form>
 
 </section>
 

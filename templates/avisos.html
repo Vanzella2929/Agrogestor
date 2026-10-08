@@ -23,10 +23,6 @@ Avisos | Agrogestor
 </div>
 
 
-<!-- ==========================================================
-     AVISOS
-     ========================================================== -->
-
 <section class="card">
 
     <div class="titulo-card">
@@ -43,25 +39,17 @@ Avisos | Agrogestor
 
         </div>
 
-        <a
-            href="{{ url_for('agenda') }}"
-            class="btn"
-        >
-            📅 Abrir agenda
-        </a>
-
     </div>
 
 
     <div class="avisos-grid">
-
 
         <!-- REBANHO -->
 
         <div class="aviso-card">
 
             <div class="aviso-card-icone">
-                🐄
+                
             </div>
 
             <div class="aviso-card-conteudo">
@@ -96,7 +84,7 @@ Avisos | Agrogestor
         <div class="aviso-card">
 
             <div class="aviso-card-icone">
-                💰
+                
             </div>
 
             <div class="aviso-card-conteudo">
@@ -131,7 +119,7 @@ Avisos | Agrogestor
         <div class="aviso-card">
 
             <div class="aviso-card-icone">
-                📊
+                
             </div>
 
             <div class="aviso-card-conteudo">
@@ -166,7 +154,7 @@ Avisos | Agrogestor
         <div class="aviso-card">
 
             <div class="aviso-card-icone">
-                📅
+                
             </div>
 
             <div class="aviso-card-conteudo">
@@ -180,30 +168,25 @@ Avisos | Agrogestor
                 </h3>
 
                 <p>
-                    Use o calendário para acompanhar
-                    as atividades da propriedade.
+                    Use esta área para acompanhar as atividades
+                    importantes da propriedade.
                 </p>
 
                 <a
                     href="{{ url_for('agenda') }}"
                     class="aviso-link"
                 >
-                    Abrir calendário →
+                    Abrir agenda →
                 </a>
 
             </div>
 
         </div>
 
-
     </div>
 
 </section>
 
-
-<!-- ==========================================================
-     ATENÇÃO
-     ========================================================== -->
 
 <section class="card aviso-atencao">
 
@@ -231,5 +214,5 @@ Avisos | Agrogestor
 
 </section>
 
-
 {% endblock %}
+```
